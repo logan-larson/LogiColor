@@ -1,64 +1,79 @@
 import { colors } from './color.js';
+import { generateClues } from './clueGenerator.js';
 
 getGame();
 
 function getGame() {
-  let numToRemove = 6;
+	let numToRemove = 6;
 
-  let solution = [
-    [{}, {}, {}, {}],
-    [{}, {}, {}, {}],
-    [{}, {}, {}, {}],
-  ];
+	// Generate the random solution
+	// Get the list of colors
+	let colorsList = colors;
 
-  let puzzle = [
-    [{}, {}, {}, {}],
-    [{}, {}, {}, {}],
-    [{}, {}, {}, {}],
-  ];
+	// Randomly shuffle the list
+	colorsList = shuffle(colorsList);
 
-  let colorsList = colors;
+	let solution = [
+		['', '', '', ''],
+		['', '', '', ''],
+		['', '', '', ''],
+	];
 
-  colorsList = shuffle(colorsList);
+	// Populate the solution array based on the list
+	for (let i = 0; i < solution.length; i++) {
+		for (let j = 0; j < solution[i].length; j++) {
+			solution[i][j] = colorsList[i * 4 + j].shortName;
+		}
+	}
 
-  let colorsToRemove = [];
+	// Randomly set the colors to be removed
+	colorsList = shuffle(colorsList);
 
-  for (let i = 0; i < numToRemove; i++) {
-    colorsToRemove.push(colorsList[i]);
-  }
+	let colorsToRemove = [];
 
-  colorsList = shuffle(colorsList);
+	for (let i = 0; i < numToRemove; i++) {
+		colorsToRemove.push(colorsList[i].shortName);
+	}
 
-  for (let i = 0; i < solution.length; i++) {
-    for (let j = 0; j < solution[i].length; j++) {
-      let colorIndex = Math.floor(Math.random() * colorsList.length);
+	// Populate the puzzle but don't add the unkown colors
+	let puzzle = [
+		['', '', '', ''],
+		['', '', '', ''],
+		['', '', '', ''],
+	];
 
-      solution[i][j] = colorsList[colorIndex];
-      puzzle[i][j] = colorsToRemove.includes(colorsList[colorIndex])
-        ? {}
-        : colorsList[colorIndex];
+	for (let i = 0; i < puzzle.length; i++) {
+		for (let j = 0; j < puzzle[i].length; j++) {
+			// Check if the color at this location is in the colors to remove
+			if (!colorsToRemove.includes(solution[i][j])) {
+				puzzle[i][j] = solution[i][j];
+			}
+		}
+	}
 
-      // I think this removes the color from the list
-      colorsList = colorsList.filter((_, i) => i != colorIndex);
-    }
-  }
+	// Generate all the possible clues
+	let clues = [];
 
-  console.log(colorsList);
+	clues = generateClues(solution);
+
+	// Select the 6 necessary clues that provide 1 solution to the puzzle
+
+	// Return the game: { puzzle, solution, clues }
 }
 
 function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
+	let currentIndex = array.length,
+		randomIndex;
 
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
+	while (currentIndex != 0) {
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
 
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
+		[array[currentIndex], array[randomIndex]] = [
+			array[randomIndex],
+			array[currentIndex],
+		];
+	}
 
-  return array;
+	return array;
 }
