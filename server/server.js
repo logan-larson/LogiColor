@@ -1,6 +1,7 @@
 import express from 'express';
 import { handler } from '../client/build/handler.js';
 import bodyParser from 'body-parser';
+import { getGame } from './generator/generator.js';
 
 const app = express();
 
@@ -9,10 +10,13 @@ app.use(bodyParser.json());
 const port = 3000;
 
 app.get('/newgame', (req, res) => {
-  // This is where I will generate a new game
+	// This is where I will generate a new game
+	let game = getGame();
 
-  // Temporarily sending a dummy game
-  res.json({
+	// Temporarily sending a dummy game
+	res.json(game);
+
+	/*{
     clues: [
       'ORANGE is next to COBALT',
       'TEAL is diagonally adjacent to PURPLE',
@@ -50,37 +54,39 @@ app.get('/newgame', (req, res) => {
       'BLACK',
     ],
     unknownColors: ['ORANGE', 'PURPLE', 'BROWN', 'CORAL', 'TEAL', 'MUSTARD'],
-  });
+  }
+  );
+  */
 });
 
 app.post('/checksolution', (req, res) => {
-  console.log(req.body);
-  const body = req.body;
+	console.log(req.body);
+	const body = req.body;
 
-  const solution = [
-    'ORANGE',
-    'PURPLE',
-    'BROWN',
-    'WHITE',
-    'COBALT',
-    'CORAL',
-    'TEAL',
-    'MUSTARD',
-    'MINT',
-    'EMERALD',
-    'MAGENTA',
-    'BLACK',
-  ];
+	const solution = [
+		'ORANGE',
+		'PURPLE',
+		'BROWN',
+		'WHITE',
+		'COBALT',
+		'CORAL',
+		'TEAL',
+		'MUSTARD',
+		'MINT',
+		'EMERALD',
+		'MAGENTA',
+		'BLACK',
+	];
 
-  console.log(body);
+	console.log(body);
 
-  const isEqual = solution.every((value, index) => value === body[index]);
+	const isEqual = solution.every((value, index) => value === body[index]);
 
-  res.json({ isCorrect: isEqual });
+	res.json({ isCorrect: isEqual });
 });
 
 app.use(handler);
 
 app.listen(port, () => {
-  console.log(`Listening on port: ${port}`);
+	console.log(`Listening on port: ${port}`);
 });
