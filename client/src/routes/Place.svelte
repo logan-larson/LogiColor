@@ -5,6 +5,8 @@
 
   import { userSolution } from '../stores/game.js';
 
+  import { knownColors } from '../stores/game.js';
+
   /**
    * @type {string}
    */

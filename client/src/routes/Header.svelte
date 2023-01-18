@@ -18,6 +18,8 @@
   }
 
   async function getNewGame() {
+    game.set({ puzzle: [], solution: [], clues: [], unknownColors: []});
+
     const res = await fetch('http://localhost:3000/newgame');
 
     const g = await res.json();
@@ -60,8 +62,9 @@
 <style>
   #header {
     background-color: #2e2f2f;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
     align-items: center;
     padding: 5px;
     color: #fff;

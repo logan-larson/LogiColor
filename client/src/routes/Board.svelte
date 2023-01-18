@@ -2,18 +2,35 @@
   import Place from './Place.svelte';
   import { game } from '../stores/game.js';
   import { userSolution } from '../stores/game.js';
+  import { knownColors } from '../stores/game.js';
 
   /**
-   * @type {{ puzzle: string[]; } | undefined}
+   * @type {string[] | undefined}
    */
   let currentGame;
 
-  let colors = ['', '', '', '', '', '', '', '', '', '', '', ''];
+  let places = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
   game.subscribe((game) => {
-    currentGame = game;
+    if (game == undefined) {
+      currentGame = undefined;
+      return;
+    }
+
+    currentGame = game.puzzle;
+    knownColors.set([]);
+
+    for (let c of game.puzzle) {
+      if (c != '') {
+        knownColors.update((colors) => {
+          //colors.push(c);
+          return colors;
+        });
+      }
+    }
+
     if (currentGame != undefined) {
-      userSolution.set(currentGame.puzzle);
+      userSolution.set(currentGame);
     }
   });
 </script>
@@ -21,11 +38,11 @@
 <div id="container">
   <div id="board">
     {#if currentGame != undefined}
-      {#each currentGame.puzzle as color, i}
+      {#each currentGame as color, i}
         <Place {color} row={Math.floor(i / 4)} col={i % 4} />
       {/each}
     {:else}
-      {#each colors as color, i}
+      {#each places as color, i}
         <Place {color} row={Math.floor(i / 4)} col={i % 4} />
       {/each}
     {/if}
@@ -35,7 +52,7 @@
 <style>
   #container {
     width: full;
-    margin-top: 50px;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
   }

@@ -2,7 +2,7 @@
   import { game } from '../stores/game.js';
 
   /**
-   * @type { {clues: [], puzzle: [], solution: [], unknownColors: []} }
+   * @type { { puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
    */
   let currentGame;
 
@@ -18,24 +18,18 @@
         <li>{clue}</li>
       {/each}
     {/if}
-    <!-- <li>MAGENTA is next to BROWN</li> -->
-    <!-- <li>COBALT is next to WHITE</li> -->
-    <!-- <li>MINT is next to BLACK</li> -->
   </ol>
 </div>
 
 <style>
   div {
     color: #fff;
-    width: 80vmin;
-    min-width: 50%;
     display: flex;
-    flex-flow: column;
-    justify-content: center;
   }
 
   ol {
     list-style-type: upper-roman;
+    margin: 20px auto;
   }
 
   li {
