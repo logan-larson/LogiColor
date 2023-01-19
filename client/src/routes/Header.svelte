@@ -1,7 +1,11 @@
 <script>
   import { game } from '../stores/game.js';
+  import { practiceGameState } from '../stores/game.js';
+  import { dailyGameState } from '../stores/game.js';
   import { isNewGameOverlayOpen } from '../stores/overlay.js';
   import { isPauseOverlayOpen } from '../stores/overlay.js';
+  import { mode } from '../stores/game.js';
+  import { timeString } from '../stores/game.js';
 
   let currentGame = [];
 
@@ -9,19 +13,46 @@
     currentGame = g.clues;
   });
 
-  let mode = 'daily';
-  let time = 34256;
-  let isPaused = true;
+  let currentPracticeGameState = '';
+  let currentDailyGameState = '';
+
+  practiceGameState.subscribe((s) => {
+    currentPracticeGameState = s;
+
+    if (currentPracticeGameState == 'solved') {
+      timeString.set(formatTime(time));
+    }
+  });
+
+  dailyGameState.subscribe((s) => {
+    currentDailyGameState = s;
+  });
+
+  let currentMode = 'daily';
+
+  mode.subscribe((m) => {
+    currentMode = m;
+  });
+
+  let time = 0;
+
+  var timer = setInterval(function() {
+    if (currentPracticeGameState == 'playing' || currentDailyGameState == 'playing') {
+      time += 1;
+    }
+  }, 1000);
 
   function setDaily() {
-    mode = 'daily';
+    mode.set('daily');
   }
 
   function setPractice() {
-    mode = 'practice';
+    mode.set('practice');
   }
 
   async function getNewGame() {
+    practiceGameState.set('loading');
+
     game.set({ puzzle: [], solution: [], clues: [], unknownColors: []});
     isNewGameOverlayOpen.set(true);
 
@@ -30,38 +61,48 @@
     const g = await res.json();
 
     game.set(g);
+
+    time = 0;
   }
 
-  function changeIsPaused() {
+  /**
+	 * @param {number} t
+	 */
+  function formatTime(t) {
+    var date = new Date(0);
+    date.setSeconds(t);
+    var timeString = date.toISOString().substring(14, 19);
+    return timeString;
+  }
+
+  function pauseGame() {
+    practiceGameState.set('paused');
     isPauseOverlayOpen.set(true);
   }
 </script>
 
 <div id="header">
   <div id="mode">
-    <button id="daily" on:click={setDaily} class={mode == 'daily' ? 'selected' : 'not-selected'}>
+    <button id="daily" on:click={setDaily} class={currentMode == 'daily' ? 'toggle-button selected' : 'toggle-button not-selected'}>
       Daily
     </button>
-    <button id="practice" on:click={setPractice} class={mode == 'practice' ? 'selected' : 'not-selected'}>
+    <button id="practice" on:click={setPractice} class={currentMode == 'practice' ? 'toggle-button selected' : 'toggle-button not-selected'}>
       Practice
     </button>
   </div>
   <div id="timer">
-    {#if currentGame.length === 0 && mode == 'practice'}
-      <button id="new-game" on:click={getNewGame}>Create New Game</button>
+    {#if currentPracticeGameState !== 'playing' && currentMode == 'practice'}
+      <button id="new-game" on:click={getNewGame} class="click-button ">Create New Game</button>
     {:else}
       <p>
-        {Math.trunc(Math.floor(time / 60000))}:{Math.floor((time % 60000) / 1000)}
+        {formatTime(time)}
+        <!--{Math.trunc(Math.floor(time / 60000))}:{Math.floor((time % 60000) / 1000)}-->
       </p>
-      {#if isPaused}
-        <button on:click={changeIsPaused}>Play</button>
-      {:else}
-        <button on:click={changeIsPaused}>Pause</button>
-      {/if}
+      <button id="pause-button" on:click={pauseGame} class="click-button">Pause</button>
     {/if}
   </div>
   <div id="stats">
-    <button>Stats</button>
+    <button class="click-button">Stats</button>
   </div>
 </div>
 
@@ -95,34 +136,37 @@
     display: flex;
   }
   
-  #daily {
-    border: none;
-    padding: 10px;
-    border-radius: 8px 0px 0px 8px;
-    margin-right: 0px;
-    cursor: pointer;
-  }
-
-  #practice {
-    border: none;
-    padding: 10px;
-    border-radius: 0px 8px 8px 0px;
-    cursor: pointer;
-  }
-
-  .selected {
-    background-color: #6b6b6b;
-  }
-
-  .not-selected {
-    background-color: #898989;
-  }
-
-  #new-game {
+  .click-button {
     border: none;
     padding: 10px;
     border-radius: 8px;
     cursor: pointer;
-    background-color: #898989;
+    font-weight: 600;
+    background-color: #6b6b6b;
+    color: #d6d6d6;
   }
+
+  .click-button:hover {
+    background-color: #575757;
+    color: #fff;
+  }
+
+  .toggle-button {
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .selected {
+    background-color: #6b6b6b;
+    color: #fff;
+  }
+
+  .not-selected {
+    background-color: #2e2f2f;
+    color: #d6d6d6;
+  }
+
 </style>

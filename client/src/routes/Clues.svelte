@@ -25,6 +25,7 @@
   div {
     color: #fff;
     display: flex;
+    font-weight: 500;
   }
 
   ol {

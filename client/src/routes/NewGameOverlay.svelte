@@ -1,6 +1,9 @@
 <script>
   import { game } from '../stores/game.js';
   import { isNewGameOverlayOpen } from '../stores/overlay.js';
+  import { mode } from '../stores/game.js';
+  import { practiceGameState } from '../stores/game.js';
+  import { dailyGameState } from '../stores/game.js';
 
   /**
 	 * @type { string[] }
@@ -15,6 +18,19 @@
     }
   });
 
+  let currentMode = '';
+
+  mode.subscribe((m) => (currentMode = m));
+
+  function play() {
+    isNewGameOverlayOpen.set(false);
+    if (currentMode === 'practice') {
+      practiceGameState.set('playing');
+    } else {
+      dailyGameState.set('playing');
+    }
+  }
+
 </script>
 
 <div class="overlay">
@@ -23,7 +39,7 @@
       <h1>Please wait while we cook up your puzzle...</h1>
     {:else}
       <h1>Ready to play?</h1>
-      <button on:click={() => isNewGameOverlayOpen.set(false)}>I'm ready</button>
+      <button on:click={play}>I'm ready</button>
     {/if}
   </div>
 </div>
@@ -43,7 +59,7 @@
 }
 
 .container {
-  width: 20vw;
+  width: 50vw;
   height: 20vh;
   color: white;
   border-radius: 12px;
@@ -56,14 +72,17 @@
 }
 
 button {
-  padding: 8px 10px;
-  background-color: #898989;
-  border-width: 0px;
+  border: none;
+  padding: 10px;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  background-color: #6b6b6b;
+  color: #d6d6d6;
 }
 
 button:hover {
-  background-color: #6b6b6b;
+  background-color: #575757;
+  color: #fff;
 }
 </style>

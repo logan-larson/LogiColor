@@ -6,6 +6,11 @@
 
   import { game } from '../stores/game.js';
   import { userSolution } from '../stores/game.js';
+  import { isCorrectSolutionOverlayOpen } from '../stores/overlay';
+  import { isIncorrectSolutionOverlayOpen } from '../stores/overlay';
+  import { mode } from '../stores/game.js';
+  import { practiceGameState } from '../stores/game.js';
+  import { dailyGameState } from '../stores/game.js';
 
   let items = [
     { id: 0, color: 'EMERALD' },
@@ -20,6 +25,10 @@
    * @type { {puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
    */
   let currentGame;
+
+  let currentMode = '';
+
+  mode.subscribe((m) => (currentMode = m));
 
   /**
    * @type { string[] }
@@ -68,9 +77,19 @@
         (value, index) => value === currentGame.solution[index]
       );
       if (isEqual) {
-        alert('Congratulations!');
+        isCorrectSolutionOverlayOpen.set(true);
+        if (currentMode == 'practice') {
+          practiceGameState.set('solved');
+        } else if (currentMode == 'daily') {
+          dailyGameState.set('solved');
+        }
       } else {
-        alert('Almost ... keep trying!');
+        isIncorrectSolutionOverlayOpen.set(true);
+        if (currentMode == 'practice') {
+          practiceGameState.set('unsolved');
+        } else if (currentMode == 'daily') {
+          dailyGameState.set('unsolved');
+        }
       }
     }
   }

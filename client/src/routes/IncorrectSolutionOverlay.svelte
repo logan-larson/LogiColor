@@ -1,19 +1,11 @@
 <script>
-  import { isPauseOverlayOpen } from '../stores/overlay.js';
-  import { practiceGameState } from '../stores/game.js';
-
-  function unpauseGame() {
-    isPauseOverlayOpen.set(false);
-    practiceGameState.set('playing');
-  }
+  import { isIncorrectSolutionOverlayOpen } from '../stores/overlay.js';
 </script>
 
 <div class="overlay">
   <div class="container">
-    <h1>Paused</h1>
-    <div>
-      <button on:click={unpauseGame}>Resume</button>
-    </div>
+    <h1>Oops, something's wrong...</h1>
+    <button on:click={() => isIncorrectSolutionOverlayOpen.set(false)}>I'll fix it</button>
   </div>
 </div>
 
@@ -32,7 +24,7 @@
 }
 
 .container {
-  width: 50vw;
+  width: 20vw;
   height: 20vh;
   color: white;
   border-radius: 12px;
@@ -45,17 +37,14 @@
 }
 
 button {
-  border: none;
-  padding: 10px;
+  padding: 8px 10px;
+  background-color: #898989;
+  border-width: 0px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-  background-color: #6b6b6b;
-  color: #d6d6d6;
 }
 
 button:hover {
-  background-color: #575757;
-  color: #fff;
+  background-color: #6b6b6b;
 }
 </style>
