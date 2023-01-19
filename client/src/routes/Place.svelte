@@ -27,17 +27,20 @@
    */
   let items = [];
 
-  $: options = {
-    items,
-    dropFromOthersDisabled: items.length != 0,
-    dragDisabled: false,
-    flipDurationMs: 100,
-  };
+  // If the color is a known color, then disable dragging
+  let _dragDisabled = false;
 
   if (color != '') {
     items.push({ id: 0, color: color });
-    //options.dragDisabled = items.length != 0;
+    _dragDisabled = true;
   }
+
+  $: options = {
+    items,
+    dropFromOthersDisabled: items.length != 0,
+    dragDisabled: _dragDisabled,
+    flipDurationMs: 100,
+  };
 
   /**
    * @param {{ detail: { items: { id: number; color: string; }[]; }; }} e
@@ -112,7 +115,7 @@
 </script>
 
 <div
-  style="color: white; background-color: #898989"
+  style="color: white; background-color: { _dragDisabled ? '#000' : '#898989' }"
   use:dndzone={options}
   on:consider={handleDndConsider}
   on:finalize={handleDndFinalize}

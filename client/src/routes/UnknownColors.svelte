@@ -17,7 +17,7 @@
   ];
 
   /**
-   * @type { {clues: [], puzzle: [], solution: [], unknownColors: []} }
+   * @type { {puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
    */
   let currentGame;
 
@@ -73,16 +73,6 @@
         alert('Almost ... keep trying!');
       }
     }
-    /*
-    console.log(`User solution: ${JSON.stringify(_userSolution)}`);
-
-    if (items.length == 0) {
-      const res = fetch('http://localhost:3000/checksolution', {
-        method: 'POST',
-        body: JSON.stringify({ _userSolution }),
-      });
-    }
-    */
   }
 </script>
 
@@ -108,7 +98,10 @@
     flex-flow: row;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
     gap: 20px;
     user-select: none;
+    height: 20vmin;
+    max-height: 100px;
   }
 </style>
