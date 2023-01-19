@@ -1,11 +1,27 @@
 <script>
   import { isIncorrectSolutionOverlayOpen } from '../stores/overlay.js';
+  import { mode } from '../stores/game.js';
+  import { practiceGameState } from '../stores/game.js';
+  import { dailyGameState } from '../stores/game.js';
+
+  let currentMode = '';
+
+  mode.subscribe((m) => (currentMode = m));
+
+  function resume() {
+    isIncorrectSolutionOverlayOpen.set(false);
+    if (currentMode == 'daily') {
+      dailyGameState.set('playing');
+    } else {
+      practiceGameState.set('playing');
+    }
+  }
 </script>
 
 <div class="overlay">
   <div class="container">
     <h1>Oops, something's wrong...</h1>
-    <button on:click={() => isIncorrectSolutionOverlayOpen.set(false)}>I'll fix it</button>
+    <button on:click={resume}>I'll fix it</button>
   </div>
 </div>
 
@@ -34,6 +50,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 800px) {
+  .container {
+    width: 90vw;
+  }
 }
 
 button {

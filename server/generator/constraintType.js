@@ -1,6 +1,6 @@
 export class ConstraintType {
 	static get NEXT_TO() {
-		return { name: 'NEXT_TO', ruleStr: ' is adjacent to ' };
+		return { name: 'NEXT_TO', ruleStr: ' is one tile away from ' };
 	}
 	static get SAME_ROW() {
 		return { name: 'SAME_ROW', ruleStr: ' is in the same row as ' };
@@ -9,7 +9,7 @@ export class ConstraintType {
 		return { name: 'SAME_COL', ruleStr: ' is in the same column as ' };
 	}
 	static get ORTHO_ADJ() {
-		return { name: 'ORTHO_ADJ', ruleStr: ' is next to ' };
+		return { name: 'ORTHO_ADJ', ruleStr: ' is orthoganally adjacent to ' };
 	}
 	static get DIAG_ADJ() {
 		return { name: 'DIAG_ADJ', ruleStr: ' is diagonally adjacent to ' };

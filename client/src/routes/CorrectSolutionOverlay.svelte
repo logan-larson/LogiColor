@@ -74,6 +74,14 @@
   justify-content: center;
   align-items: center;
   background-color: #252524;
+  filter: drop-shadow(0px 10px 10px #000000);
+}
+
+@media (max-width: 800px) {
+  .container {
+    width: 90vw;
+    height: 30vh;
+  }
 }
 
 button {

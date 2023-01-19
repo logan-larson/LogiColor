@@ -151,6 +151,18 @@
     color: #fff;
   }
 
+  @media (max-width: 600px) {
+    .toggle-button {
+      padding: 7px;
+      font-size: 12px;
+    }
+
+    .click-button {
+      padding: 7px;
+      font-size: 12px;
+    }
+  }
+
   .toggle-button {
     border: none;
     padding: 10px;

@@ -70,6 +70,12 @@
   justify-content: center;
   align-items: center;
 }
+  
+@media (max-width: 800px) {
+  .container {
+    width: 90vw;
+  }
+}
 
 button {
   border: none;
