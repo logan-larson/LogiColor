@@ -22,7 +22,7 @@ export async function getNewGame() {
   var lines = stdout.split(nl);
 
 
-  var unknownColors = lines[0].split(',').filter((color) => color !== r);
+  var unknownColors = lines[0].split(',').filter((color) => color !== r).filter((color) => color !== '');
 
 
   var puzzle = lines[1].split(',').filter((color) => color !== '');
@@ -30,11 +30,7 @@ export async function getNewGame() {
   var clues = [];
 
   for (let i = 0; i < 6; i++) {
-    if (i == 5) {
-      clues.push(lines[i+2].substring(0, lines[i+2].length - 1));
-    } else {
-      clues.push(lines[i + 2]);
-    }
+    clues.push(lines[i+2].substring(3, lines[i+2].length));
   }
 
   var solution = lines[8].split(',').filter((color) => color !== '');
