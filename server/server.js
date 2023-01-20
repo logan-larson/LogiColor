@@ -1,7 +1,6 @@
 import express from 'express';
 import { handler } from '../client/build/handler.js';
 import bodyParser from 'body-parser';
-import { getGame } from './generator/generator.js';
 import { getNewGame } from './generator/gameGenerator.js';
 
 const app = express();

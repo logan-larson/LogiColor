@@ -127,9 +127,9 @@
 
 <style>
   div {
-    width: 20vmin;
+    width: 10vmax;
     max-width: 100px;
-    height: 20vmin;
+    height: 10vmax;
     max-height: 100px;
     display: flex;
     align-items: center;
@@ -139,9 +139,9 @@
     user-select: none;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 500px) {
     div {
-      font-size: 12px;
+      font-size: 8px;
     }
   }
 </style>

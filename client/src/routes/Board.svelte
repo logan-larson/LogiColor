@@ -61,7 +61,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    grid-gap: 20px;
+    grid-gap: 10px;
     padding: 5px;
     background-color: #2e2f2f;
     border-radius: 8px;

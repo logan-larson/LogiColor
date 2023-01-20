@@ -61,9 +61,9 @@
 <style>
   div {
     position: relative;
-    width: 18vmin;
+    width: 8vmax;
     max-width: 90px;
-    height: 18vmin;
+    height: 8vmax;
     max-height: 90px;
     display: flex;
     place-self: center;
@@ -72,9 +72,21 @@
     border-radius: 8px;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 1000px) {
     div {
       font-size: 12px;
+    }
+  }
+
+  @media (max-width: 800px) {
+    div {
+      font-size: 10px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    div {
+      font-size: 8px;
     }
   }
 </style>

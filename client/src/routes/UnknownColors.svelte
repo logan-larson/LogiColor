@@ -118,9 +118,15 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 5px;
     user-select: none;
     height: 20vmin;
     max-height: 100px;
+  }
+
+  @media (max-width: 600px) {
+    #container {
+      margin-top: 20px;
+    }
   }
 </style>
