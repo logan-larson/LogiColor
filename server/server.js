@@ -2,61 +2,23 @@ import express from 'express';
 import { handler } from '../client/build/handler.js';
 import bodyParser from 'body-parser';
 import { getGame } from './generator/generator.js';
+import { getNewGame } from './generator/gameGenerator.js';
 
 const app = express();
 
 app.use(bodyParser.json());
 
-const port = 3000;
+const port = 80;
 
-app.get('/newgame', (req, res) => {
+app.get('/newgame', async (req, res) => {
 	// This is where I will generate a new game
-	let game = getGame();
+	let game = await getNewGame();
 
-	// Temporarily sending a dummy game
 	res.json(game);
+});
 
-	/*{
-    clues: [
-      'ORANGE is next to COBALT',
-      'TEAL is diagonally adjacent to PURPLE',
-      'PURPLE is next to BROWN',
-      'CORAL is diagonally adjacent to MINT',
-      'WHITE is diagonally adjacent to TEAL',
-      'MUSTARD is somewhere below WHITE',
-    ],
-    puzzle: [
-      '',
-      '',
-      '',
-      'WHITE',
-      'COBALT',
-      '',
-      '',
-      '',
-      'MINT',
-      'EMERALD',
-      'MAGENTA',
-      'BLACK',
-    ],
-    solution: [
-      'ORANGE',
-      'PURPLE',
-      'BROWN',
-      'WHITE',
-      'COBALT',
-      'CORAL',
-      'TEAL',
-      'MUSTARD',
-      'MINT',
-      'EMERALD',
-      'MAGENTA',
-      'BLACK',
-    ],
-    unknownColors: ['ORANGE', 'PURPLE', 'BROWN', 'CORAL', 'TEAL', 'MUSTARD'],
-  }
-  );
-  */
+app.get('/dailygame', (req, res) => {
+
 });
 
 app.post('/checksolution', (req, res) => {

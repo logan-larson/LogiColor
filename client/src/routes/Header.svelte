@@ -56,9 +56,14 @@
     game.set({ puzzle: [], solution: [], clues: [], unknownColors: []});
     isNewGameOverlayOpen.set(true);
 
-    const res = await fetch('http://localhost:3000/newgame');
+    const res = await fetch('http://localhost/newgame');
+    // const res = await fetch('http://192.46.222.24/newgame');
+
+    console.log(res);
 
     const g = await res.json();
+
+    console.log(g);
 
     game.set(g);
 
