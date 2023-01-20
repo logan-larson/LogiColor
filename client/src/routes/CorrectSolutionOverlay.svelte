@@ -1,7 +1,5 @@
 <script>
   import { isCorrectSolutionOverlayOpen } from '../stores/overlay.js';
-  import { game } from '../stores/game.js';
-
   import { timeString } from '../stores/game.js';
 
   /**
@@ -14,23 +12,21 @@
   });
 
   function share() {
+    if (navigator.canShare()) {
+      navigator
+        .share({
+          title: 'Logicolor',
+          text: `I solved the puzzle in ${time}!`,
+          url: 'http://logicolor.fun',
+        })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+      navigator.clipboard.writeText(`I solved the puzzle in ${time}! At http://logicolor.fun`);
+      alert('Copied results to clipboard!');
+    }
+
     isCorrectSolutionOverlayOpen.set(false);
-    /*
-    game.set({ puzzle: [
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-], solution: [], clues: [], unknownColors: [] });
-  */
   }
 
   function close() {

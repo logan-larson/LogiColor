@@ -17,33 +17,6 @@ app.get('/newgame', async (req, res) => {
 });
 
 app.get('/dailygame', (req, res) => {
-
-});
-
-app.post('/checksolution', (req, res) => {
-	console.log(req.body);
-	const body = req.body;
-
-	const solution = [
-		'ORANGE',
-		'PURPLE',
-		'BROWN',
-		'WHITE',
-		'COBALT',
-		'CORAL',
-		'TEAL',
-		'MUSTARD',
-		'MINT',
-		'EMERALD',
-		'MAGENTA',
-		'BLACK',
-	];
-
-	console.log(body);
-
-	const isEqual = solution.every((value, index) => value === body[index]);
-
-	res.json({ isCorrect: isEqual });
 });
 
 app.use(handler);

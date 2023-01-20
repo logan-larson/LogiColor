@@ -56,8 +56,8 @@
     game.set({ puzzle: [], solution: [], clues: [], unknownColors: []});
     isNewGameOverlayOpen.set(true);
 
-    const res = await fetch('http://localhost/newgame');
-    // const res = await fetch('http://192.46.222.24/newgame');
+    // const res = await fetch('http://localhost/newgame');
+    const res = await fetch('http://logicolor.fun/newgame');
 
     console.log(res);
 
