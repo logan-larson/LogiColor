@@ -11,6 +11,8 @@
   import { isCorrectSolutionOverlayOpen } from '../stores/overlay.js';
   import IncorrectSolutionOverlay from './IncorrectSolutionOverlay.svelte';
   import { isIncorrectSolutionOverlayOpen } from '../stores/overlay.js';
+  import HelpOverlay from './HelpOverlay.svelte';
+  import { isHelpOverlayOpen } from '../stores/overlay.js';
 </script>
 
 {#if $isNewGameOverlayOpen}
@@ -24,6 +26,9 @@
 {/if}
 {#if $isIncorrectSolutionOverlayOpen}
   <IncorrectSolutionOverlay />
+{/if}
+{#if $isHelpOverlayOpen}
+  <HelpOverlay />
 {/if}
 
 <Header />

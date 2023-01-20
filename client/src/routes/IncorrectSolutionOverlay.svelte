@@ -61,6 +61,7 @@
 button {
   padding: 8px 10px;
   background-color: #898989;
+  color: #d6d6d6;
   border-width: 0px;
   border-radius: 8px;
   cursor: pointer;
@@ -68,5 +69,6 @@ button {
 
 button:hover {
   background-color: #6b6b6b;
+  color: #fff;
 }
 </style>

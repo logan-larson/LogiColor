@@ -4,6 +4,7 @@
   import { dailyGameState } from '../stores/game.js';
   import { isNewGameOverlayOpen } from '../stores/overlay.js';
   import { isPauseOverlayOpen } from '../stores/overlay.js';
+  import { isHelpOverlayOpen } from '../stores/overlay.js';
   import { mode } from '../stores/game.js';
   import { timeString } from '../stores/game.js';
 
@@ -84,6 +85,10 @@
     practiceGameState.set('paused');
     isPauseOverlayOpen.set(true);
   }
+
+  function openHelp() {
+    isHelpOverlayOpen.set(true);
+  }
 </script>
 
 <div id="header">
@@ -107,7 +112,7 @@
     {/if}
   </div>
   <div id="stats">
-    <button class="click-button">Stats</button>
+    <button class="click-button" on:click={openHelp}>Help</button>
   </div>
 </div>
 
