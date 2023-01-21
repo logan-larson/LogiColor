@@ -35,5 +35,12 @@
 
   li {
     margin: 3px 0px;
+    font-size: 20px;
+  }
+
+  @media(max-width: 600px) {
+    li {
+      font-size: 12px;
+    }
   }
 </style>

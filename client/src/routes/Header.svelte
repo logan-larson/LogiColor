@@ -60,11 +60,7 @@
     // const res = await fetch('http://localhost/newgame');
     const res = await fetch('http://logicolor.fun/newgame');
 
-    console.log(res);
-
     const g = await res.json();
-
-    console.log(g);
 
     game.set(g);
 
