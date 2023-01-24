@@ -1,4 +1,5 @@
 <script>
+	import { dailyGame } from '../stores/game.js';
 	import { practiceGame } from '../stores/game.js';
 	import { dailyUserSolution } from '../stores/game.js';
 	import { practiceUserSolution } from '../stores/game.js';
@@ -9,8 +10,9 @@
 	import { isHelpOverlayOpen } from '../stores/overlay.js';
 	import { mode } from '../stores/game.js';
 	import { timeString } from '../stores/game.js';
-	import { onDestroy, onMount } from 'svelte';
 	import { getNewPracticeGame } from '../stores/game.js';
+
+	let currentMode = 'daily';
 
 	/**
 	 * @type { { puzzle: string[], solution: string[], clues: string[], unknownColors: string[] } | never[] }
@@ -18,7 +20,15 @@
 	let currentGame = [];
 
 	practiceGame.subscribe((g) => {
-		currentGame = g;
+		if (currentMode == 'practice') {
+			currentGame = g;
+		}
+	});
+
+	dailyGame.subscribe((g) => {
+		if (currentMode == 'daily') {
+			currentGame = g;
+		}
 	});
 
 	/**
@@ -59,139 +69,22 @@
 		}
 	});
 
-	let currentMode = 'daily';
-
 	mode.subscribe(async (m) => {
+		// If the user is currently playing a game, pause it
+		if (currentMode == 'practice' && currentPracticeGameState == 'playing') {
+			practiceGameState.set('paused');
+		} else if (currentMode == 'daily' && currentDailyGameState == 'playing') {
+			dailyGameState.set('paused');
+		}
+
 		currentMode = m;
 
-		/*
-		game.set({
-			puzzle: ['', '', '', '', '', '', '', '', '', '', '', ''],
-			solution: [],
-			clues: [],
-			unknownColors: [],
-		});
-
-		if (currentMode == 'daily') {
-			dailyUserSolution.set(['', '', '', '', '', '', '', '', '', '', '', '']);
-
-			if (currentDailyGameState == 'notStarted') {
-				dailyGameState.set('loading');
-
-				game.set({ puzzle: [], solution: [], clues: [], unknownColors: [] });
-				isNewGameOverlayOpen.set(true);
-
-				const res = await fetch('http://localhost/dailygame');
-				// const res = await fetch('http://logicolor.fun/dailygame');
-
-				const g = await res.json();
-
-				game.set(g);
-				dailyUserSolution.set(g.puzzle);
-
-				dailyTime = 0;
-			} else if (currentDailyGameState == 'playing') {
-				let daily = localStorage.getItem('daily');
-				let dailyUserSolutionInLS = localStorage.getItem('dailyUserSolution');
-				if (daily != null && dailyUserSolutionInLS != null) {
-					let dailyParsed = JSON.parse(daily);
-					let dailyUserSolutionParsed = JSON.parse(dailyUserSolutionInLS);
-
-					game.set({
-						puzzle: dailyParsed.puzzle,
-						solution: dailyParsed.solution,
-						clues: dailyParsed.clues,
-						unknownColors: dailyParsed.unknownColors,
-					});
-					dailyUserSolution.set(dailyUserSolutionParsed);
-				}
-			}
-		} else if (currentMode == 'practice') {
-			practiceUserSolution.set([
-				'',
-				'',
-				'',
-				'',
-				'',
-				'',
-				'',
-				'',
-				'',
-				'',
-				'',
-				'',
-			]);
-
-			let practiceGameStateInLS = localStorage.getItem('practiceGameState');
-			let practiceGameInLS = localStorage.getItem('practice');
-			let practiceUserSolutionInLS = localStorage.getItem(
-				'practiceUserSolution'
-			);
-
-			if (
-				practiceGameStateInLS != null &&
-				practiceGameInLS != null &&
-				practiceUserSolutionInLS != null
-			) {
-				practiceGameState.set(practiceGameStateInLS);
-				game.set(JSON.parse(practiceGameInLS));
-				practiceUserSolution.set(JSON.parse(practiceUserSolutionInLS));
-			} else {
-				console.log('no practice game in local storage, starting new game');
-				practiceGameState.set('notStarted');
-				game.set({
-					puzzle: ['', '', '', '', '', '', '', '', '', '', '', ''],
-					solution: [],
-					clues: [],
-					unknownColors: [],
-				});
-				practiceUserSolution.set([
-					'',
-					'',
-					'',
-					'',
-					'',
-					'',
-					'',
-					'',
-					'',
-					'',
-					'',
-					'',
-				]);
-			}
-
-			if (currentPracticeGameState == 'notStarted') {
-				game.set({
-					puzzle: ['', '', '', '', '', '', '', '', '', '', '', ''],
-					solution: [],
-					clues: [],
-					unknownColors: [],
-				});
-
-				practiceTime = 0;
-			} else if (
-				currentPracticeGameState == 'playing' ||
-				currentPracticeGameState == 'solved'
-			) {
-				let practice = localStorage.getItem('practice');
-				let practiceUserSolution = localStorage.getItem('practiceUserSolution');
-				if (practice != null && practiceUserSolution != null) {
-					let practiceParsed = JSON.parse(practice);
-					let practiceUserSolutionParsed = JSON.parse(practiceUserSolution);
-
-					game.set({
-						puzzle: practiceParsed.puzzle,
-						solution: practiceParsed.solution,
-						clues: practiceParsed.clues,
-						unknownColors: practiceParsed.unknownColors,
-					});
-					userSolution.set(practiceUserSolutionParsed);
-				}
-			}
-      
+		// Resume the current game if it was paused
+		if (currentMode == 'practice' && currentPracticeGameState == 'paused') {
+			practiceGameState.set('playing');
+		} else if (currentMode == 'daily' && currentDailyGameState == 'paused') {
+			dailyGameState.set('playing');
 		}
-		*/
 	});
 
 	let practiceTime = 0;
@@ -206,32 +99,10 @@
 	}, 1000);
 
 	function setDaily() {
-		/*
-		if (currentGame && currentMode == 'practice') {
-			localStorage.setItem('practice', JSON.stringify(currentGame));
-			localStorage.setItem(
-				'practiceUserSolution',
-				JSON.stringify(currentPracticeUserSolution)
-			);
-			localStorage.setItem('practiceGameState', currentPracticeGameState);
-		}
-		*/
-
 		mode.set('daily');
 	}
 
 	function setPractice() {
-		/*
-		if (currentGame && currentMode == 'daily') {
-			localStorage.setItem('daily', JSON.stringify(currentGame));
-			localStorage.setItem(
-				'dailyUserSolution',
-				JSON.stringify(currentDailyUserSolution)
-			);
-			localStorage.setItem('dailyGameState', currentDailyGameState);
-		}
-		*/
-
 		mode.set('practice');
 	}
 
