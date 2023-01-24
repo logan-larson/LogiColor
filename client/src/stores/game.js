@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export const game = writable({ puzzle: [
+export const practiceGame = writable({ puzzle: [
   '',
   '',
   '',
@@ -14,7 +14,7 @@ export const game = writable({ puzzle: [
   '',
   '',
 ], solution: [], clues: [], unknownColors: [] });
-export const userSolution = writable([
+export const dailyGame = writable({ puzzle: [
   '',
   '',
   '',
@@ -27,7 +27,7 @@ export const userSolution = writable([
   '',
   '',
   '',
-]);
+], solution: [], clues: [], unknownColors: [] });
 
 export const dailyUserSolution = writable([
   '',
@@ -58,9 +58,6 @@ export const practiceUserSolution = writable([
   '',
   '',
 ]);
-
-
-export const knownColors = writable([]);
 
 export const dailyGameState = writable('notStarted');
 export const practiceGameState = writable('notStarted');

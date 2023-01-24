@@ -1,11 +1,9 @@
 <script>
 	import Place from './Place.svelte';
-	import { game } from '../stores/game.js';
-	import { userSolution } from '../stores/game.js';
+	import { practiceGame } from '../stores/game.js';
 	import { dailyUserSolution } from '../stores/game.js';
 	import { practiceUserSolution } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
-	import { knownColors } from '../stores/game.js';
 
 	/*
 	let currentMode = 'daily';
@@ -48,26 +46,16 @@
 
 	let places = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
-	game.subscribe((game) => {
+	practiceGame.subscribe((game) => {
 		if (game == undefined) {
 			currentGame = undefined;
 			return;
 		}
 
 		currentGame = game.puzzle;
-		knownColors.set([]);
-
-		for (let c of game.puzzle) {
-			if (c != '') {
-				knownColors.update((colors) => {
-					//colors.push(c);
-					return colors;
-				});
-			}
-		}
 
 		if (currentGame != undefined) {
-			userSolution.set(currentGame);
+			practiceUserSolution.set(currentGame);
 		}
 	});
 </script>

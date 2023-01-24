@@ -3,7 +3,7 @@
 
 	import { dndzone } from 'svelte-dnd-action';
 
-	import { userSolution } from '../stores/game.js';
+	// import { serSolution } from '../stores/game.js';
 	import { dailyUserSolution } from '../stores/game.js';
 	import { practiceUserSolution } from '../stores/game.js';
 
@@ -80,7 +80,7 @@
 
 		if (items[0] != undefined && items[0].color != undefined) {
 			// Update the users solution to the puzzle
-			userSolution.update((s) => {
+			practiceUserSolution.update((s) => {
 				s[row * 4 + col] = items[0].color;
 				return s;
 			});

@@ -4,8 +4,8 @@
 	import { dndzone } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 
-	import { game } from '../stores/game.js';
-	import { userSolution } from '../stores/game.js';
+	import { practiceGame } from '../stores/game.js';
+	// import { userSolution } from '../stores/game.js';
 	import { dailyUserSolution } from '../stores/game.js';
 	import { practiceUserSolution } from '../stores/game.js';
 	import { isCorrectSolutionOverlayOpen } from '../stores/overlay';
@@ -35,11 +35,11 @@
 	/**
 	 * @type { string[] }
 	 */
-	let _userSolution = [];
+	let _practiceUserSolution = [];
 
-	userSolution.subscribe((s) => (_userSolution = s));
+	practiceUserSolution.subscribe((s) => (_practiceUserSolution = s));
 
-	game.subscribe((g) => {
+	practiceGame.subscribe((g) => {
 		currentGame = g;
 
 		if (currentGame != undefined) {
@@ -56,24 +56,6 @@
 	let _dailyUserSolution = [];
 
 	dailyUserSolution.subscribe((s) => (_dailyUserSolution = s));
-
-	/**
-	 * @type { string[] }
-	 */
-	let _practiceUserSolution = [];
-
-	practiceUserSolution.subscribe((s) => (_practiceUserSolution = s));
-
-	game.subscribe((g) => {
-		currentGame = g;
-
-		if (currentGame != undefined) {
-			items = [];
-			currentGame.unknownColors.forEach((c, i) =>
-				items.push({ id: i, color: c })
-			);
-		}
-	});
 
 	const flipDurationMs = 300;
 
@@ -98,7 +80,7 @@
 		items = e.detail.items;
 
 		if (items.length == 0) {
-			const isEqual = _userSolution.every(
+			const isEqual = _practiceUserSolution.every(
 				(value, index) => value === currentGame.solution[index]
 			);
 			if (isEqual) {

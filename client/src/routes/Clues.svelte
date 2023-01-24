@@ -1,5 +1,5 @@
 <script>
-	import { game } from '../stores/game.js';
+	import { practiceGame } from '../stores/game.js';
 	import { getNewPracticeGame } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
 
@@ -14,7 +14,7 @@
 	 */
 	let currentGame;
 
-	game.subscribe((g) => {
+	practiceGame.subscribe((g) => {
 		currentGame = g;
 	});
 </script>

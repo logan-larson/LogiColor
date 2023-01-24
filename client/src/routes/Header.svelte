@@ -1,5 +1,5 @@
 <script>
-	import { game } from '../stores/game.js';
+	import { practiceGame } from '../stores/game.js';
 	import { dailyUserSolution } from '../stores/game.js';
 	import { practiceUserSolution } from '../stores/game.js';
 	import { practiceGameState } from '../stores/game.js';
@@ -17,7 +17,7 @@
 	 */
 	let currentGame = [];
 
-	game.subscribe((g) => {
+	practiceGame.subscribe((g) => {
 		currentGame = g;
 	});
 
@@ -245,15 +245,20 @@
 	async function getNewGame() {
 		practiceGameState.set('loading');
 
-		game.set({ puzzle: [], solution: [], clues: [], unknownColors: [] });
+		practiceGame.set({
+			puzzle: [],
+			solution: [],
+			clues: [],
+			unknownColors: [],
+		});
 		isNewGameOverlayOpen.set(true);
 
-		// const res = await fetch('http://localhost/newgame');
-		const res = await fetch('http://logicolor.fun/newgame');
+		const res = await fetch('http://localhost/newgame');
+		// const res = await fetch('http://logicolor.fun/newgame');
 
 		const g = await res.json();
 
-		game.set(g);
+		practiceGame.set(g);
 		// practiceUserSolution.set(g.puzzle);
 
 		practiceTime = 0;
