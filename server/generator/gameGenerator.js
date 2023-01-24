@@ -38,8 +38,6 @@ export async function getNewGame() {
 
   let game = convertToLongStrings(puzzle, solution, clues, unknownColors);
 
-  console.log(game);
-
   return game;
 }
 

@@ -2,6 +2,7 @@ import express from 'express';
 import { handler } from '../client/build/handler.js';
 import bodyParser from 'body-parser';
 import { getNewGame } from './generator/gameGenerator.js';
+import { readFile} from "fs";
 
 const app = express();
 
@@ -17,6 +18,17 @@ app.get('/newgame', async (req, res) => {
 });
 
 app.get('/dailygame', (req, res) => {
+	console.log("Getting daily game");
+	readFile("./daily-games.json", (err, data) => {
+		if (err) {
+			console.log(err);
+			res.json(err);
+		} else { 
+			const dailyGames = JSON.parse(data);
+
+			res.json(dailyGames[dailyGames.length - 1]);
+		}
+	});
 });
 
 app.use(handler);

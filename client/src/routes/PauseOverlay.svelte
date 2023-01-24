@@ -1,10 +1,23 @@
 <script>
   import { isPauseOverlayOpen } from '../stores/overlay.js';
   import { practiceGameState } from '../stores/game.js';
+  import { dailyGameState } from '../stores/game.js';
+  import { mode } from '../stores/game.js';
+
+  let currentMode = 'daily';
+
+  mode.subscribe((m) => {
+    currentMode = m;
+  });
 
   function unpauseGame() {
     isPauseOverlayOpen.set(false);
-    practiceGameState.set('playing');
+    if (currentMode == 'practice') {
+      practiceGameState.set('playing');
+    }
+    if (currentMode == 'daily') {
+      dailyGameState.set('playing');
+    }
   }
 </script>
 
