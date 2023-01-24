@@ -1,8 +1,5 @@
 <script>
-	import { dailyGame } from '../stores/game.js';
 	import { practiceGame } from '../stores/game.js';
-	import { dailyUserSolution } from '../stores/game.js';
-	import { practiceUserSolution } from '../stores/game.js';
 	import { practiceGameState } from '../stores/game.js';
 	import { dailyGameState } from '../stores/game.js';
 	import { isNewGameOverlayOpen } from '../stores/overlay.js';
@@ -14,42 +11,7 @@
 
 	let currentMode = 'daily';
 
-	/**
-	 * @type { { puzzle: string[], solution: string[], clues: string[], unknownColors: string[] } | never[] }
-	 */
-	let currentGame = [];
-
-	practiceGame.subscribe((g) => {
-		if (currentMode == 'practice') {
-			currentGame = g;
-		}
-	});
-
-	dailyGame.subscribe((g) => {
-		if (currentMode == 'daily') {
-			currentGame = g;
-		}
-	});
-
-	/**
-	 * @type {string[]}
-	 */
-	let currentDailyUserSolution = [];
-
-	dailyUserSolution.subscribe((u) => {
-		currentDailyUserSolution = u;
-	});
-
-	/**
-	 * @type {string[]}
-	 */
-	let currentPracticeUserSolution = [];
-
-	practiceUserSolution.subscribe((u) => {
-		currentPracticeUserSolution = u;
-	});
-
-	let currentPracticeGameState = '';
+	let currentPracticeGameState = 'notStarted';
 
 	practiceGameState.subscribe((s) => {
 		currentPracticeGameState = s;
@@ -90,7 +52,7 @@
 	let practiceTime = 0;
 	let dailyTime = 0;
 
-	var timer = setInterval(function () {
+	setInterval(function () {
 		if (currentPracticeGameState == 'playing') {
 			practiceTime += 1;
 		} else if (currentDailyGameState == 'playing') {
@@ -130,7 +92,6 @@
 		const g = await res.json();
 
 		practiceGame.set(g);
-		// practiceUserSolution.set(g.puzzle);
 
 		practiceTime = 0;
 	}
