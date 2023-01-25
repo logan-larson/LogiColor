@@ -1,21 +1,20 @@
 import { getNewGame } from "./generator/gameGenerator.js";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFile } from "fs";
 
-const dailyGames = [];
+let dailyGames = [];
 
-readFileSync("./daily-games.json", "utf8", (err, data) => {
-  if (err) {
-    console.log(err);
-  } else { 
-    dailyGames = JSON.parse(data);
-  }
-});
+try {
+  let data = readFileSync("./daily-games.json", "utf8");
+  dailyGames = JSON.parse(data);
+} catch (err) {
+  console.error(err);
+}
 
 const newGame = await getNewGame();
 
 dailyGames.push(newGame);
 
-writeFileSync("./daily-games.json", JSON.stringify(dailyGames), (err) => {
+writeFile("./daily-games.json", JSON.stringify(dailyGames), (err) => {
   if (err) {
     console.log(err);
   }

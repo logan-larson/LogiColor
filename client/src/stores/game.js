@@ -15,12 +15,15 @@ let localStorageDailyUserSolution = null;
 let localStorageDailyGameState = null;
 let localStorageDailyColorsInTray = null;
 
+// General
+let localStorageMode = null;
+
 
 // -------------------------- Retrieve the local storage values --------------------------
 // Temporarily disabled, because it's causing an error
-/*
 if (browser) {
 
+  /*
   // Practice
 
   // @ts-ignore
@@ -42,8 +45,13 @@ if (browser) {
   localStorageDailyGameState = localStorage.getItem('dailyGameState') ? localStorage.getItem('dailyGameState') : null;
   // @ts-ignore
   localStorageDailyColorsInTray = localStorage.getItem('dailyColorsInTray') ? JSON.parse(localStorage.getItem('dailyColorsInTray')) : null;
+  */
+
+  // General
+
+  // @ts-ignore
+  localStorageMode = localStorage.getItem('mode') ? localStorage.getItem('mode') : null;
 }
-*/
 
 // -------------------------- Define the stores --------------------------
 
@@ -129,6 +137,10 @@ export const dailyGameState = writable(localStorageDailyGameState || 'notStarted
 export const dailyColorsInTray = writable(localStorageDailyColorsInTray || []);
 
 
+// -------------------- General --------------------
+
+export const mode = writable(localStorageMode || 'daily');
+
 
 
 // -------------------- Subscribe to the stores, and update the local storage --------------------
@@ -148,13 +160,16 @@ if (browser) {
   dailyGameState.subscribe((value) => localStorage.setItem('dailyGameState', JSON.stringify(value)));
   dailyColorsInTray.subscribe((value) => localStorage.setItem('dailyColorsInTray', JSON.stringify(value)));
 
+  // General
+
+  mode.subscribe((value) => localStorage.setItem('mode', value));
 }
 
 
 
-
-export const mode = writable('daily');
-
 export const timeString = writable('00:00');
 
 export const getNewPracticeGame = writable(false);
+export const getDailyGame = writable(false);
+
+export const dailyGameNumber = writable(0);

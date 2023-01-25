@@ -1,5 +1,6 @@
 <script>
 	import { practiceGame } from '../stores/game.js';
+	import { dailyGame } from '../stores/game.js';
 	import { isNewGameOverlayOpen } from '../stores/overlay.js';
 	import { mode } from '../stores/game.js';
 	import { practiceGameState } from '../stores/game.js';
@@ -10,23 +11,35 @@
 	 */
 	let currentGame = [];
 
-	practiceGame.subscribe((g) => {
-		if (g != undefined) {
-			currentGame = g.puzzle;
-		} else {
-			currentGame = [];
-		}
-	});
-
 	let currentMode = '';
 
 	mode.subscribe((m) => (currentMode = m));
+
+	practiceGame.subscribe((g) => {
+		if (currentMode == 'practice') {
+			if (g != undefined) {
+				currentGame = g.puzzle;
+			} else {
+				currentGame = [];
+			}
+		}
+	});
+
+	dailyGame.subscribe((g) => {
+		if (currentMode == 'daily') {
+			if (g != undefined) {
+				currentGame = g.puzzle;
+			} else {
+				currentGame = [];
+			}
+		}
+	});
 
 	function play() {
 		isNewGameOverlayOpen.set(false);
 		if (currentMode === 'practice') {
 			practiceGameState.set('playing');
-		} else {
+		} else if (currentMode === 'daily') {
 			dailyGameState.set('playing');
 		}
 	}
@@ -34,6 +47,11 @@
 
 <div class="overlay">
 	<div class="container">
+		{#if currentMode === 'practice'}
+			<h1>Practice</h1>
+		{:else if currentMode === 'daily'}
+			<h1>Daily</h1>
+		{/if}
 		{#if currentGame.length === 0}
 			<h1>Please wait while we cook up your puzzle...</h1>
 		{:else}

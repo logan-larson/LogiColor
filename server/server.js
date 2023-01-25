@@ -18,7 +18,6 @@ app.get('/newgame', async (req, res) => {
 });
 
 app.get('/dailygame', (req, res) => {
-	console.log("Getting daily game");
 	readFile("./daily-games.json", (err, data) => {
 		if (err) {
 			console.log(err);
@@ -26,7 +25,7 @@ app.get('/dailygame', (req, res) => {
 		} else { 
 			const dailyGames = JSON.parse(data);
 
-			res.json(dailyGames[dailyGames.length - 1]);
+			res.json({ game: dailyGames[dailyGames.length - 1], number: dailyGames.length  });
 		}
 	});
 });

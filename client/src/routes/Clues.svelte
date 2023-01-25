@@ -3,6 +3,7 @@
 	import { dailyGame } from '../stores/game.js';
 	import { getNewPracticeGame } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
+	import { dailyGameNumber } from '../stores/game.js';
 
 	let currentMode = 'daily';
 
@@ -27,6 +28,12 @@
 	dailyGame.subscribe((g) => {
 		currentDailyGame = g;
 	});
+
+	let currentDailyGameNumber = 0;
+
+	dailyGameNumber.subscribe((n) => {
+		currentDailyGameNumber = n;
+	});
 </script>
 
 <div>
@@ -38,6 +45,8 @@
 			}}
 			class="click-button">Create New Game</button
 		>
+	{:else if currentMode == 'daily'}
+		<h1>Day {currentDailyGameNumber}</h1>
 	{/if}
 	<ol>
 		{#if currentMode == 'practice' && currentPracticeGame != undefined}
@@ -70,8 +79,18 @@
 		font-size: 20px;
 	}
 
+	h1 {
+		margin: 10px 0px 0px;
+		font-size: 20px;
+		text-align: center;
+	}
+
 	@media (max-width: 600px) {
 		li {
+			font-size: 14px;
+		}
+
+		h1 {
 			font-size: 14px;
 		}
 	}

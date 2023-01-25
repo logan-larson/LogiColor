@@ -1,6 +1,7 @@
 <script>
 	import { practiceGame } from '../stores/game.js';
 	import { practiceGameState } from '../stores/game.js';
+	import { dailyGame } from '../stores/game.js';
 	import { dailyGameState } from '../stores/game.js';
 	import { isNewGameOverlayOpen } from '../stores/overlay.js';
 	import { isPauseOverlayOpen } from '../stores/overlay.js';
@@ -8,6 +9,9 @@
 	import { mode } from '../stores/game.js';
 	import { timeString } from '../stores/game.js';
 	import { getNewPracticeGame } from '../stores/game.js';
+	import { getDailyGame } from '../stores/game.js';
+	import { onMount } from 'svelte';
+	import { dailyGameNumber } from '../stores/game.js';
 
 	let currentMode = 'daily';
 
@@ -49,6 +53,12 @@
 		}
 	});
 
+	onMount(async () => {
+		if (currentMode == 'daily') {
+			getDailyGameFromServer();
+		}
+	});
+
 	let practiceTime = 0;
 	let dailyTime = 0;
 
@@ -74,6 +84,36 @@
 			getNewPracticeGame.set(false);
 		}
 	});
+
+	getDailyGame.subscribe((p) => {
+		if (p) {
+			getDailyGameFromServer();
+			getDailyGame.set(false);
+		}
+	});
+
+	async function getDailyGameFromServer() {
+		dailyGameState.set('loading');
+
+		dailyGame.set({
+			puzzle: [],
+			solution: [],
+			clues: [],
+			unknownColors: [],
+		});
+		isNewGameOverlayOpen.set(true);
+
+		const res = await fetch('http://localhost/dailygame');
+		// const res = await fetch('http://logicolor.fun/newgame');
+
+		const g = await res.json();
+
+		dailyGame.set(g.game);
+
+		dailyGameNumber.set(g.number);
+
+		dailyTime = 0;
+	}
 
 	async function getNewGame() {
 		practiceGameState.set('loading');
