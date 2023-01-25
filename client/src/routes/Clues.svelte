@@ -1,5 +1,6 @@
 <script>
 	import { practiceGame } from '../stores/game.js';
+	import { dailyGame } from '../stores/game.js';
 	import { getNewPracticeGame } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
 
@@ -12,10 +13,19 @@
 	/**
 	 * @type { { puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
 	 */
-	let currentGame;
+	let currentPracticeGame;
+
+	/**
+	 * @type { { puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
+	 */
+	let currentDailyGame;
 
 	practiceGame.subscribe((g) => {
-		currentGame = g;
+		currentPracticeGame = g;
+	});
+
+	dailyGame.subscribe((g) => {
+		currentDailyGame = g;
 	});
 </script>
 
@@ -30,8 +40,12 @@
 		>
 	{/if}
 	<ol>
-		{#if currentGame != undefined}
-			{#each currentGame.clues as clue}
+		{#if currentMode == 'practice' && currentPracticeGame != undefined}
+			{#each currentPracticeGame.clues as clue}
+				<li>{clue}</li>
+			{/each}
+		{:else if currentMode == 'daily' && currentDailyGame != undefined}
+			{#each currentDailyGame.clues as clue}
 				<li>{clue}</li>
 			{/each}
 		{/if}

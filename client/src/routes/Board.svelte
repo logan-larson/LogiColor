@@ -1,75 +1,82 @@
 <script>
 	import Place from './Place.svelte';
 	import { practiceGame } from '../stores/game.js';
-	import { dailyUserSolution } from '../stores/game.js';
 	import { practiceUserSolution } from '../stores/game.js';
+	import { dailyGame } from '../stores/game.js';
+	import { dailyUserSolution } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
 
-	/*
 	let currentMode = 'daily';
 
 	mode.subscribe((m) => {
 		currentMode = m;
 	});
 
-	let places = ['', '', '', '', '', '', '', '', '', '', '', ''];
-
-	*/
 	/**
 	 * @type {string[] | undefined}
 	 */
-	/*
-	let currentUserSolution = undefined;
-
-	dailyUserSolution.subscribe((u) => {
-		if (currentMode == 'daily') {
-			currentUserSolution = u;
-		}
-	});
-
-	practiceUserSolution.subscribe((u) => {
-		if (currentMode == 'practice') {
-			currentUserSolution = u;
-		}
-	});
-	*/
+	let currentPracticeGame;
 
 	/**
 	 * @type {string[] | undefined}
 	 */
-	let currentGame;
-
-	/**
-	 * @type {string[] | undefined}
-	 */
-	let currentUserSolution = undefined;
+	let currentDailyGame;
 
 	let places = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
 	practiceGame.subscribe((game) => {
+		if (currentMode != 'practice') return;
+
 		if (game == undefined) {
-			currentGame = undefined;
+			currentPracticeGame = undefined;
 			return;
 		}
 
-		currentGame = game.puzzle;
+		currentPracticeGame = game.puzzle;
 
-		if (currentGame != undefined) {
-			practiceUserSolution.set(currentGame);
+		if (currentPracticeGame != undefined) {
+			practiceUserSolution.set(currentPracticeGame);
+		}
+	});
+
+	dailyGame.subscribe((game) => {
+		if (currentMode != 'daily') return;
+
+		if (game == undefined) {
+			currentDailyGame = undefined;
+			return;
+		}
+
+		currentDailyGame = game.puzzle;
+
+		if (currentDailyGame != undefined) {
+			dailyUserSolution.set(currentDailyGame);
 		}
 	});
 </script>
 
 <div id="container">
 	<div id="board">
-		{#if currentGame != undefined}
-			{#each currentGame as color, i}
-				<Place {color} row={Math.floor(i / 4)} col={i % 4} />
-			{/each}
-		{:else}
-			{#each places as color, i}
-				<Place {color} row={Math.floor(i / 4)} col={i % 4} />
-			{/each}
+		{#if currentMode == 'practice'}
+			{#if currentPracticeGame != undefined}
+				{#each currentPracticeGame as color, i}
+					<Place {color} row={Math.floor(i / 4)} col={i % 4} />
+				{/each}
+			{:else}
+				{#each places as color, i}
+					<Place {color} row={Math.floor(i / 4)} col={i % 4} />
+				{/each}
+			{/if}
+		{:else if currentMode == 'daily'}
+			{#if currentDailyGame != undefined}
+				{#each currentDailyGame as color, i}
+					<Place {color} row={Math.floor(i / 4)} col={i % 4} />
+				{/each}
+			{:else}
+				{#each places as color, i}
+					<Place {color} row={Math.floor(i / 4)} col={i % 4} />
+				{/each}
+			{/if}
 		{/if}
 	</div>
 </div>

@@ -3,9 +3,11 @@
 
 	import { dndzone } from 'svelte-dnd-action';
 
-	// import { serSolution } from '../stores/game.js';
 	import { dailyUserSolution } from '../stores/game.js';
 	import { practiceUserSolution } from '../stores/game.js';
+
+	import { dailyGame } from '../stores/game.js';
+	import { practiceGame } from '../stores/game.js';
 
 	import { mode } from '../stores/game.js';
 
@@ -32,29 +34,84 @@
 	// If the color is a known color, then disable dragging
 	let _dragDisabled = false;
 
+	/**
+	 * @type {string | string[]}
+	 */
+	let currentDailyUnknownColors = [];
+	/**
+	 * @type {string | string[]}
+	 */
+	let currentPracticeUnknownColors = [];
+
+	dailyGame.subscribe(
+		(game) => (currentDailyUnknownColors = game.unknownColors)
+	);
+	practiceGame.subscribe(
+		(game) => (currentPracticeUnknownColors = game.unknownColors)
+	);
+
 	let currentMode = 'daily';
 
-	/*
 	mode.subscribe((m) => {
 		currentMode = m;
 	});
-
-	dailyUserSolution.subscribe((s) => {
-		changeColor();
-	});
-
-	practiceUserSolution.subscribe((s) => {
-		changeColor();
-	});
-	*/
 
 	changeColor();
 
 	function changeColor() {
 		items = [];
 		if (color != '') {
-			items.push({ id: 0, color: color });
-			_dragDisabled = true;
+			let _id = getColorId(color);
+			items.push({ id: _id, color: color });
+			// _dragDisabled = true;
+			// /*
+			if (
+				currentMode == 'daily' &&
+				!currentDailyUnknownColors.includes(color)
+			) {
+				_dragDisabled = true;
+			} else if (
+				currentMode == 'practice' &&
+				!currentPracticeUnknownColors.includes(color)
+			) {
+				_dragDisabled = true;
+			}
+			// */
+		}
+	}
+
+	/**
+	 *
+	 * @param {string} color
+	 */
+	function getColorId(color) {
+		switch (color) {
+			case 'BLACK':
+				return 0;
+			case 'TEAL':
+				return 1;
+			case 'ORANGE':
+				return 2;
+			case 'MINT':
+				return 3;
+			case 'EMERALD':
+				return 4;
+			case 'MAGENTA':
+				return 5;
+			case 'MUSTARD':
+				return 6;
+			case 'PURPLE':
+				return 7;
+			case 'BROWN':
+				return 8;
+			case 'WHITE':
+				return 9;
+			case 'CORAL':
+				return 10;
+			case 'COBALT':
+				return 11;
+			default:
+				return -1;
 		}
 	}
 
@@ -80,11 +137,6 @@
 
 		if (items[0] != undefined && items[0].color != undefined) {
 			// Update the users solution to the puzzle
-			practiceUserSolution.update((s) => {
-				s[row * 4 + col] = items[0].color;
-				return s;
-			});
-			/*
 			if (currentMode == 'daily') {
 				dailyUserSolution.update((s) => {
 					s[row * 4 + col] = items[0].color;
@@ -96,7 +148,19 @@
 					return s;
 				});
 			}
-			*/
+		} else {
+			// Update the users solution to the puzzle
+			if (currentMode == 'daily') {
+				dailyUserSolution.update((s) => {
+					s[row * 4 + col] = '';
+					return s;
+				});
+			} else if (currentMode == 'practice') {
+				practiceUserSolution.update((s) => {
+					s[row * 4 + col] = '';
+					return s;
+				});
+			}
 		}
 	}
 </script>

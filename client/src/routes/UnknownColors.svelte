@@ -4,8 +4,8 @@
 	import { dndzone } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 
+	import { dailyGame } from '../stores/game.js';
 	import { practiceGame } from '../stores/game.js';
-	// import { userSolution } from '../stores/game.js';
 	import { dailyUserSolution } from '../stores/game.js';
 	import { practiceUserSolution } from '../stores/game.js';
 	import { isCorrectSolutionOverlayOpen } from '../stores/overlay';
@@ -13,6 +13,8 @@
 	import { mode } from '../stores/game.js';
 	import { practiceGameState } from '../stores/game.js';
 	import { dailyGameState } from '../stores/game.js';
+	import { practiceColorsInTray } from '../stores/game.js';
+	import { dailyColorsInTray } from '../stores/game.js';
 
 	let items = [
 		{ id: 0, color: 'EMERALD' },
@@ -26,11 +28,49 @@
 	/**
 	 * @type { {puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
 	 */
-	let currentGame;
+	let currentPracticeGame;
+
+	/**
+	 * @type { {puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
+	 */
+	let currentDailyGame;
+
+	/**
+	 * @type {string[]}
+	 */
+	let currentPracticeColorsInTray = [];
+
+	practiceColorsInTray.subscribe((c) => (currentPracticeColorsInTray = c));
+
+	/**
+	 * @type {string[]}
+	 */
+	let currentDailyColorsInTray = [];
+
+	dailyColorsInTray.subscribe((c) => (currentDailyColorsInTray = c));
 
 	let currentMode = '';
 
-	mode.subscribe((m) => (currentMode = m));
+	mode.subscribe((m) => {
+		if (currentMode == 'daily') {
+			dailyColorsInTray.set(items.map((i) => i.color));
+		} else if (currentMode == 'practice') {
+			practiceColorsInTray.set(items.map((i) => i.color));
+		}
+
+		currentMode = m;
+		items = [];
+
+		if (currentMode == 'practice') {
+			currentPracticeColorsInTray.forEach((c, i) =>
+				items.push({ id: i, color: c })
+			);
+		} else if (currentMode == 'daily') {
+			currentDailyColorsInTray.forEach((c, i) =>
+				items.push({ id: i, color: c })
+			);
+		}
+	});
 
 	/**
 	 * @type { string[] }
@@ -40,13 +80,14 @@
 	practiceUserSolution.subscribe((s) => (_practiceUserSolution = s));
 
 	practiceGame.subscribe((g) => {
-		currentGame = g;
+		currentPracticeGame = g;
 
-		if (currentGame != undefined) {
+		if (currentPracticeGame != undefined) {
 			items = [];
-			currentGame.unknownColors.forEach((c, i) =>
-				items.push({ id: i, color: c })
-			);
+			currentPracticeGame.unknownColors.forEach((c, i) => {
+				let _id = getColorId(c);
+				items.push({ id: _id, color: c });
+			});
 		}
 	});
 
@@ -56,6 +97,53 @@
 	let _dailyUserSolution = [];
 
 	dailyUserSolution.subscribe((s) => (_dailyUserSolution = s));
+
+	dailyGame.subscribe((g) => {
+		currentDailyGame = g;
+
+		if (currentDailyGame != undefined) {
+			items = [];
+			currentDailyGame.unknownColors.forEach((c, i) => {
+				let _id = getColorId(c);
+				items.push({ id: _id, color: c });
+			});
+		}
+	});
+
+	/**
+	 *
+	 * @param {string} color
+	 */
+	function getColorId(color) {
+		switch (color) {
+			case 'BLACK':
+				return 0;
+			case 'TEAL':
+				return 1;
+			case 'ORANGE':
+				return 2;
+			case 'MINT':
+				return 3;
+			case 'EMERALD':
+				return 4;
+			case 'MAGENTA':
+				return 5;
+			case 'MUSTARD':
+				return 6;
+			case 'PURPLE':
+				return 7;
+			case 'BROWN':
+				return 8;
+			case 'WHITE':
+				return 9;
+			case 'CORAL':
+				return 10;
+			case 'COBALT':
+				return 11;
+			default:
+				return -1;
+		}
+	}
 
 	const flipDurationMs = 300;
 
@@ -80,35 +168,17 @@
 		items = e.detail.items;
 
 		if (items.length == 0) {
-			const isEqual = _practiceUserSolution.every(
-				(value, index) => value === currentGame.solution[index]
-			);
-			if (isEqual) {
-				isCorrectSolutionOverlayOpen.set(true);
-				if (currentMode == 'practice') {
-					practiceGameState.set('solved');
-				} else if (currentMode == 'daily') {
-					dailyGameState.set('solved');
-				}
-			} else {
-				isIncorrectSolutionOverlayOpen.set(true);
-				if (currentMode == 'practice') {
-					practiceGameState.set('unsolved');
-				} else if (currentMode == 'daily') {
-					dailyGameState.set('unsolved');
-				}
+			let isEqual = false;
+			if (currentMode == 'practice') {
+				isEqual = _practiceUserSolution.every(
+					(value, index) => value === currentPracticeGame.solution[index]
+				);
+			} else if (currentMode == 'daily') {
+				isEqual = _dailyUserSolution.every(
+					(value, index) => value === currentDailyGame.solution[index]
+				);
 			}
-		}
 
-		// Check if items is empty
-		// If so, check with server if the user's solution is correct
-		/*
-		let _userSolution =
-			currentMode == 'daily' ? _dailyUserSolution : _practiceUserSolution;
-		if (items.length == 0) {
-			const isEqual = _userSolution.every(
-				(value, index) => value === currentGame.solution[index]
-			);
 			if (isEqual) {
 				isCorrectSolutionOverlayOpen.set(true);
 				if (currentMode == 'practice') {
@@ -125,7 +195,6 @@
 				}
 			}
 		}
-		*/
 	}
 </script>
 
@@ -135,12 +204,22 @@
 	on:consider={handleDndConsider}
 	on:finalize={handleDndFinalize}
 >
-	{#if currentGame != undefined}
-		{#each items as item (item.id)}
-			<div animate:flip={{ duration: flipDurationMs }}>
-				<Color color={item.color} />
-			</div>
-		{/each}
+	{#if currentMode == 'practice'}
+		{#if currentPracticeGame != undefined}
+			{#each items as item (item.id)}
+				<div animate:flip={{ duration: flipDurationMs }}>
+					<Color color={item.color} />
+				</div>
+			{/each}
+		{/if}
+	{:else if currentMode == 'daily'}
+		{#if currentDailyGame != undefined}
+			{#each items as item (item.id)}
+				<div animate:flip={{ duration: flipDurationMs }}>
+					<Color color={item.color} />
+				</div>
+			{/each}
+		{/if}
 	{/if}
 </div>
 
