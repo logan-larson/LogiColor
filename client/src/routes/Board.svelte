@@ -5,7 +5,6 @@
 	import { dailyGame } from '../stores/game.js';
 	import { dailyUserSolution } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
-	import { getDailyGame } from '../stores/game.js';
 
 	/**
 	 * @type {string[] | undefined}
@@ -21,11 +20,6 @@
 
 	mode.subscribe((m) => {
 		currentMode = m;
-
-		// If the mode is daily and the daily game is undefined, then get the daily game
-		if (m == 'daily' && currentDailyGame == undefined) {
-			getDailyGame.set(true);
-		}
 	});
 
 	let places = ['', '', '', '', '', '', '', '', '', '', '', ''];
@@ -50,7 +44,6 @@
 
 		if (game == undefined) {
 			currentDailyGame = undefined;
-			getDailyGame.set(true);
 			return;
 		}
 

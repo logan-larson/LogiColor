@@ -53,12 +53,6 @@
 		}
 	});
 
-	onMount(async () => {
-		if (currentMode == 'daily') {
-			getDailyGameFromServer();
-		}
-	});
-
 	let practiceTime = 0;
 	let dailyTime = 0;
 
@@ -103,8 +97,8 @@
 		});
 		isNewGameOverlayOpen.set(true);
 
-		// const res = await fetch('http://localhost/dailygame');
-		const res = await fetch('http://logicolor.fun/dailygame');
+		const res = await fetch('http://localhost/dailygame');
+		// const res = await fetch('http://logicolor.fun/dailygame');
 
 		const g = await res.json();
 
@@ -126,8 +120,8 @@
 		});
 		isNewGameOverlayOpen.set(true);
 
-		// const res = await fetch('http://localhost/newgame');
-		const res = await fetch('http://logicolor.fun/newgame');
+		const res = await fetch('http://localhost/newgame');
+		// const res = await fetch('http://logicolor.fun/newgame');
 
 		const g = await res.json();
 

@@ -2,8 +2,10 @@
 	import { practiceGame } from '../stores/game.js';
 	import { dailyGame } from '../stores/game.js';
 	import { getNewPracticeGame } from '../stores/game.js';
+	import { getDailyGame } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
 	import { dailyGameNumber } from '../stores/game.js';
+	import { dailyGameState } from '../stores/game.js';
 
 	let currentMode = 'daily';
 
@@ -34,19 +36,35 @@
 	dailyGameNumber.subscribe((n) => {
 		currentDailyGameNumber = n;
 	});
+
+	let currentDailyGameState = 'loading';
+
+	dailyGameState.subscribe((s) => {
+		currentDailyGameState = s;
+	});
 </script>
 
 <div>
 	{#if currentMode == 'practice'}
 		<button
-			id="new-game"
+			id="new-practice-game"
 			on:click={() => {
 				getNewPracticeGame.set(true);
 			}}
 			class="click-button">Create New Game</button
 		>
 	{:else if currentMode == 'daily'}
-		<h1>Day {currentDailyGameNumber}</h1>
+		{#if currentDailyGameState == 'notStarted'}
+			<button
+				id="new-daily-game"
+				on:click={() => {
+					getDailyGame.set(true);
+				}}
+				class="click-button">Play Daily Game</button
+			>
+		{:else}
+			<h1>Day {currentDailyGameNumber}</h1>
+		{/if}
 	{/if}
 	<ol>
 		{#if currentMode == 'practice' && currentPracticeGame != undefined}
