@@ -1,6 +1,20 @@
 <script>
 	import { isCorrectSolutionOverlayOpen } from '../stores/overlay.js';
 	import { timeString } from '../stores/game.js';
+	import { mode } from '../stores/game.js';
+	import { dailyGameNumber } from '../stores/game.js';
+
+	let currentMode = 'daily';
+
+	mode.subscribe((m) => {
+		currentMode = m;
+	});
+
+	let currentDailyGameNumber = 0;
+
+	dailyGameNumber.subscribe((n) => {
+		currentDailyGameNumber = n;
+	});
 
 	/**
 	 * @type {string}
@@ -12,20 +26,38 @@
 	});
 
 	function share() {
-		if (navigator.canShare()) {
-			navigator
-				.share({
-					title: 'Logicolor',
-					text: `I solved the puzzle in ${time}!`,
-					url: 'http://logicolor.fun',
-				})
-				.then(() => console.log('Successful share'))
-				.catch((error) => console.log('Error sharing', error));
+		if (currentMode == 'daily') {
+			if (navigator.share) {
+				navigator
+					.share({
+						title: `Daily Logicolor`,
+						text: `Daily Puzzle #${currentDailyGameNumber}\nI solved the puzzle in ${time}!`,
+						url: 'https://logicolor.fun',
+					})
+					.then(() => console.log('Successful share'))
+					.catch((error) => console.log('Error sharing', error));
+			} else {
+				navigator.clipboard.writeText(
+					`Daily Puzzle #${currentDailyGameNumber}\nI solved the puzzle in ${time}!\nAt http://logicolor.fun`
+				);
+				alert('Copied results to your clipboard!');
+			}
 		} else {
-			navigator.clipboard.writeText(
-				`I solved the puzzle in ${time}! At http://logicolor.fun`
-			);
-			alert('Copied results to clipboard!');
+			if (navigator.share) {
+				navigator
+					.share({
+						title: 'Practice Logicolor',
+						text: `Practice Puzzle\nI solved the puzzle in ${time}!`,
+						url: 'https://logicolor.fun',
+					})
+					.then(() => console.log('Successful share'))
+					.catch((error) => console.log('Error sharing', error));
+			} else {
+				navigator.clipboard.writeText(
+					`Practice Puzzle\nI solved the puzzle in ${time}!\nAt http://logicolor.fun`
+				);
+				alert('Copied results to your clipboard!');
+			}
 		}
 
 		isCorrectSolutionOverlayOpen.set(false);
