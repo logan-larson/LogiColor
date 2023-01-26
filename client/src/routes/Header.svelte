@@ -150,7 +150,8 @@
 	}
 
 	function openHelp() {
-		isHelpOverlayOpen.set(true);
+		//isHelpOverlayOpen.set(true);
+		window.open('help.pdf', '_blank');
 	}
 </script>
 
