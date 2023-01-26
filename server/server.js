@@ -8,7 +8,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const port = 80;
+const port = 5000;
 
 app.get('/newgame', async (req, res) => {
 	// This is where I will generate a new game
