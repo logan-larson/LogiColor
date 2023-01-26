@@ -7,9 +7,9 @@ const asyncExec = promisify(exec);
 export async function getNewGame() {
 
 
-  const { stdout, stderr } = await asyncExec("java -cp generator/bin Generator");
+  // const { stdout, stderr } = await asyncExec("java -cp generator/bin Generator");
   // Server path (localhost)
-  // const { stdout, stderr } = await asyncExec("java -cp /root/ColorPuzzleApp/server/generator/bin Generator");
+  const { stdout, stderr } = await asyncExec("java -cp /root/ColorPuzzleApp/server/generator/bin Generator");
 
   if (stderr) {
     console.log(`stderr: ${stderr}`);
