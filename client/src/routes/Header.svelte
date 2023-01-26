@@ -98,7 +98,7 @@
 		isNewGameOverlayOpen.set(true);
 
 		// const res = await fetch('http://localhost/dailygame');
-		const res = await fetch('http://logicolor.fun/dailygame');
+		const res = await fetch('https://logicolor.fun/dailygame');
 
 		const g = await res.json();
 
@@ -121,7 +121,7 @@
 		isNewGameOverlayOpen.set(true);
 
 		// const res = await fetch('http://localhost/newgame');
-		const res = await fetch('http://logicolor.fun/newgame');
+		const res = await fetch('https://logicolor.fun/newgame');
 
 		const g = await res.json();
 
