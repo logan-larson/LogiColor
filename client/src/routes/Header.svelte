@@ -274,10 +274,6 @@
 		color: #fff;
 	}
 
-	#banner {
-		grid-column: 1 / 4;
-	}
-
 	#mode {
 		display: flex;
 		align-items: center;
@@ -291,7 +287,6 @@
 
 	#timer p {
 		margin: 0px 10px;
-		font-size: 16px;
 	}
 
 	#help {

@@ -261,7 +261,7 @@
 
 	@media (max-width: 600px) {
 		#container {
-			margin-top: 5px;
+			margin-top: 20px;
 		}
 	}
 </style>
