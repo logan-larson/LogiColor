@@ -259,6 +259,7 @@
 		align-items: center;
 		padding: 8px;
 		color: #fff;
+		margin-top: 50px;
 	}
 
 	#mode {
@@ -274,6 +275,7 @@
 
 	#timer p {
 		margin: 0px 10px;
+		font-size: 16px;
 	}
 
 	#help {
