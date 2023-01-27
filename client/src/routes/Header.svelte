@@ -1,9 +1,17 @@
 <script>
-	import { practiceGame } from '../stores/game.js';
+	import {
+		practiceColorsInTray,
+		practiceGame,
+		practiceUserSolution,
+	} from '../stores/game.js';
 	import { practiceGameState } from '../stores/game.js';
 	import { dailyGame } from '../stores/game.js';
 	import { dailyGameState } from '../stores/game.js';
-	import { isNewGameOverlayOpen } from '../stores/overlay.js';
+	import {
+		isCorrectSolutionOverlayOpen,
+		isIncorrectSolutionOverlayOpen,
+		isNewGameOverlayOpen,
+	} from '../stores/overlay.js';
 	import { isPauseOverlayOpen } from '../stores/overlay.js';
 	import { isHelpOverlayOpen } from '../stores/overlay.js';
 	import { mode } from '../stores/game.js';
@@ -12,16 +20,30 @@
 	import { getDailyGame } from '../stores/game.js';
 	import { onMount } from 'svelte';
 	import { dailyGameNumber } from '../stores/game.js';
+	import { practiceTime } from '../stores/game.js';
+	import { dailyTime } from '../stores/game.js';
+	import { browser } from '$app/environment';
 
 	let currentMode = 'daily';
 
 	let currentPracticeGameState = 'notStarted';
 
+	let currentPracticeTime = 0;
+	let currentDailyTime = 0;
+
+	practiceTime.subscribe((t) => {
+		currentPracticeTime = t;
+	});
+
+	dailyTime.subscribe((t) => {
+		currentDailyTime = t;
+	});
+
 	practiceGameState.subscribe((s) => {
 		currentPracticeGameState = s;
 
-		if (currentPracticeGameState == 'solved') {
-			timeString.set(formatTime(practiceTime));
+		if ($mode == 'practice' && currentPracticeGameState == 'solved') {
+			timeString.set(formatTime(currentPracticeTime));
 		}
 	});
 
@@ -30,37 +52,36 @@
 	dailyGameState.subscribe((s) => {
 		currentDailyGameState = s;
 
-		if (currentDailyGameState == 'solved') {
-			timeString.set(formatTime(dailyTime));
+		if ($mode == 'daily' && currentDailyGameState == 'solved') {
+			timeString.set(formatTime(currentDailyTime));
 		}
 	});
 
 	mode.subscribe(async (m) => {
-		// If the user is currently playing a game, pause it
-		if (currentMode == 'practice' && currentPracticeGameState == 'playing') {
-			practiceGameState.set('paused');
-		} else if (currentMode == 'daily' && currentDailyGameState == 'playing') {
-			dailyGameState.set('paused');
-		}
-
 		currentMode = m;
 
-		// Resume the current game if it was paused
-		if (currentMode == 'practice' && currentPracticeGameState == 'paused') {
-			practiceGameState.set('playing');
-		} else if (currentMode == 'daily' && currentDailyGameState == 'paused') {
-			dailyGameState.set('playing');
+		if (currentMode == 'practice') {
+			if (currentPracticeGameState == 'solved') {
+				timeString.set(formatTime(currentPracticeTime));
+				isCorrectSolutionOverlayOpen.set(true);
+			} else if (currentPracticeGameState == 'unsolved') {
+				practiceGameState.set('playing');
+			}
+		} else if (currentMode == 'daily') {
+			if (currentDailyGameState == 'solved') {
+				timeString.set(formatTime(currentDailyTime));
+				isCorrectSolutionOverlayOpen.set(true);
+			} else if (currentDailyGameState == 'unsolved') {
+				dailyGameState.set('playing');
+			}
 		}
 	});
 
-	let practiceTime = 0;
-	let dailyTime = 0;
-
 	setInterval(function () {
-		if (currentPracticeGameState == 'playing') {
-			practiceTime += 1;
-		} else if (currentDailyGameState == 'playing') {
-			dailyTime += 1;
+		if (currentMode == 'practice' && currentPracticeGameState == 'playing') {
+			practiceTime.update((n) => n + 1);
+		} else if (currentMode == 'daily' && currentDailyGameState == 'playing') {
+			dailyTime.update((n) => n + 1);
 		}
 	}, 1000);
 
@@ -97,7 +118,7 @@
 		});
 		isNewGameOverlayOpen.set(true);
 
-		// const res = await fetch('http://localhost/dailygame');
+		// const res = await fetch('http://localhost:5000/dailygame');
 		const res = await fetch('https://logicolor.fun/dailygame');
 
 		const g = await res.json();
@@ -106,11 +127,14 @@
 
 		dailyGameNumber.set(g.number);
 
-		dailyTime = 0;
+		dailyTime.set(0);
 	}
 
 	async function getNewGame() {
 		practiceGameState.set('loading');
+
+		practiceUserSolution.set([]);
+		practiceColorsInTray.set([]);
 
 		practiceGame.set({
 			puzzle: [],
@@ -120,14 +144,14 @@
 		});
 		isNewGameOverlayOpen.set(true);
 
-		// const res = await fetch('http://localhost/newgame');
+		// const res = await fetch('http://localhost:5000/newgame');
 		const res = await fetch('https://logicolor.fun/newgame');
 
 		const g = await res.json();
 
 		practiceGame.set(g);
 
-		practiceTime = 0;
+		practiceTime.set(0);
 	}
 
 	/**
@@ -153,6 +177,30 @@
 		//isHelpOverlayOpen.set(true);
 		window.open('help.pdf', '_blank');
 	}
+
+	onMount(async () => {
+		if (currentMode == 'practice') {
+			if (currentPracticeGameState == 'paused') {
+				pauseGame();
+			} else if (currentPracticeGameState == 'solved') {
+				isCorrectSolutionOverlayOpen.set(true);
+			} else if (currentPracticeGameState == 'unsolved') {
+				isIncorrectSolutionOverlayOpen.set(true);
+			} else if (currentPracticeGameState == 'loading') {
+				isNewGameOverlayOpen.set(true);
+			}
+		} else if (currentMode == 'daily') {
+			if (currentDailyGameState == 'paused') {
+				pauseGame();
+			} else if (currentDailyGameState == 'solved') {
+				isCorrectSolutionOverlayOpen.set(true);
+			} else if (currentDailyGameState == 'unsolved') {
+				isIncorrectSolutionOverlayOpen.set(true);
+			} else if (currentDailyGameState == 'loading') {
+				isNewGameOverlayOpen.set(true);
+			}
+		}
+	});
 </script>
 
 <div id="header">
@@ -179,7 +227,7 @@
 	<div id="timer">
 		{#if currentMode === 'daily'}
 			<p>
-				{formatTime(dailyTime)}
+				{formatTime(currentDailyTime)}
 			</p>
 			{#if currentDailyGameState === 'playing'}
 				<button id="pause-button" on:click={pauseGame} class="click-button"
@@ -188,7 +236,7 @@
 			{/if}
 		{:else}
 			<p>
-				{formatTime(practiceTime)}
+				{formatTime(currentPracticeTime)}
 			</p>
 			{#if currentPracticeGameState === 'playing'}
 				<button id="pause-button" on:click={pauseGame} class="click-button"

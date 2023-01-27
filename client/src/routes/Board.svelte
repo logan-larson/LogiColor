@@ -25,32 +25,48 @@
 	let places = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
 	practiceGame.subscribe((game) => {
-		if (currentMode != 'practice') return;
-
 		if (game == undefined) {
 			currentPracticeGame = undefined;
 			return;
 		}
 
-		currentPracticeGame = game.puzzle;
+		let practiceSolutionIsEmpty = true;
 
-		if (currentPracticeGame != undefined) {
+		for (let i = 0; i < $practiceUserSolution.length; i++) {
+			if ($practiceUserSolution[i] != '') {
+				practiceSolutionIsEmpty = false;
+				break;
+			}
+		}
+
+		if (practiceSolutionIsEmpty) {
+			currentPracticeGame = game.puzzle;
 			practiceUserSolution.set(currentPracticeGame);
+		} else {
+			currentPracticeGame = $practiceUserSolution;
 		}
 	});
 
 	dailyGame.subscribe((game) => {
-		if (currentMode != 'daily') return;
-
 		if (game == undefined) {
 			currentDailyGame = undefined;
 			return;
 		}
 
-		currentDailyGame = game.puzzle;
+		let dailySolutionIsEmpty = true;
 
-		if (currentDailyGame != undefined) {
+		for (let i = 0; i < $dailyUserSolution.length; i++) {
+			if ($dailyUserSolution[i] != '') {
+				dailySolutionIsEmpty = false;
+				break;
+			}
+		}
+
+		if (dailySolutionIsEmpty) {
+			currentDailyGame = game.puzzle;
 			dailyUserSolution.set(currentDailyGame);
+		} else {
+			currentDailyGame = $dailyUserSolution;
 		}
 	});
 </script>

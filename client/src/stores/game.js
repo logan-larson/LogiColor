@@ -1,6 +1,8 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
+export const timeString = writable('00:00');
+
 // -------------------------- Define locally stored variables --------------------------
 
 // Practice
@@ -8,12 +10,15 @@ let localStoragePracticeGame = null;
 let localStoragePracticeUserSolution = null;
 let localStoragePracticeGameState = null;
 let localStoragePracticeColorsInTray = null;
+let localStoragePracticeTime = null;
 
 // Daily
 let localStorageDailyGame = null;
 let localStorageDailyUserSolution = null;
 let localStorageDailyGameState = null;
 let localStorageDailyColorsInTray = null;
+let localStorageDailyTime = null;
+let localStorageDailyGameNumber = null;
 
 // General
 let localStorageMode = null;
@@ -23,7 +28,6 @@ let localStorageMode = null;
 // Temporarily disabled, because it's causing an error
 if (browser) {
 
-  /*
   // Practice
 
   // @ts-ignore
@@ -34,6 +38,8 @@ if (browser) {
   localStoragePracticeGameState = localStorage.getItem('practiceGameState') ? localStorage.getItem('practiceGameState') : null;
   // @ts-ignore
   localStoragePracticeColorsInTray = localStorage.getItem('practiceColorsInTray') ? JSON.parse(localStorage.getItem('practiceColorsInTray')) : null;
+  // @ts-ignore
+  localStoragePracticeTime = localStorage.getItem('practiceTime') ? JSON.parse(localStorage.getItem('practiceTime')) : null;
 
   // Daily
 
@@ -45,7 +51,10 @@ if (browser) {
   localStorageDailyGameState = localStorage.getItem('dailyGameState') ? localStorage.getItem('dailyGameState') : null;
   // @ts-ignore
   localStorageDailyColorsInTray = localStorage.getItem('dailyColorsInTray') ? JSON.parse(localStorage.getItem('dailyColorsInTray')) : null;
-  */
+  // @ts-ignore
+  localStorageDailyTime = localStorage.getItem('dailyTime') ? JSON.parse(localStorage.getItem('dailyTime')) : null;
+  // @ts-ignore
+  localStorageDailyGameNumber = localStorage.getItem('dailyGameNumber') ? JSON.parse(localStorage.getItem('dailyGameNumber')) : null;
 
   // General
 
@@ -91,9 +100,11 @@ export const practiceGameState = writable(localStoragePracticeGameState || 'notS
 
 
 /**
- * @type {import('svelte/store').Writable<string[]>}
+ * @type {import('svelte/store').Writable<{ id: number; color: string; }[]>}
  */
 export const practiceColorsInTray = writable(localStoragePracticeColorsInTray || []);
+
+export const practiceTime = writable(localStoragePracticeTime || 0);
 
 
 // -------------------- Daily --------------------
@@ -113,28 +124,19 @@ export const dailyGame = writable(localStorageDailyGame || { puzzle: [
   '',
 ], solution: [], clues: [], unknownColors: [] });
 
-export const dailyUserSolution = writable(localStorageDailyUserSolution || [
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-]);
+export const dailyUserSolution = writable(localStorageDailyUserSolution || []);
 
 export const dailyGameState = writable(localStorageDailyGameState || 'notStarted');
 
 
 /**
- * @type {import('svelte/store').Writable<string[]>}
+ * @type {import('svelte/store').Writable<{ id: number; color: string; }[]>}
  */
 export const dailyColorsInTray = writable(localStorageDailyColorsInTray || []);
+
+export const dailyTime = writable(localStorageDailyTime || 0);
+
+export const dailyGameNumber = writable(localStorageDailyGameNumber || 0);
 
 
 // -------------------- General --------------------
@@ -150,26 +152,23 @@ if (browser) {
 
   practiceGame.subscribe((value) => localStorage.setItem('practiceGame', JSON.stringify(value)));
   practiceUserSolution.subscribe((value) => localStorage.setItem('practiceUserSolution', JSON.stringify(value)));
-  practiceGameState.subscribe((value) => localStorage.setItem('practiceGameState', JSON.stringify(value)));
+  practiceGameState.subscribe((value) => localStorage.setItem('practiceGameState', value ));
   practiceColorsInTray.subscribe((value) => localStorage.setItem('practiceColorsInTray', JSON.stringify(value)));
+  practiceTime.subscribe((value) => localStorage.setItem('practiceTime', JSON.stringify(value)));
 
   // Daily
 
   dailyGame.subscribe((value) => localStorage.setItem('dailyGame', JSON.stringify(value)));
   dailyUserSolution.subscribe((value) => localStorage.setItem('dailyUserSolution', JSON.stringify(value)));
-  dailyGameState.subscribe((value) => localStorage.setItem('dailyGameState', JSON.stringify(value)));
+  dailyGameState.subscribe((value) => localStorage.setItem('dailyGameState', value));
   dailyColorsInTray.subscribe((value) => localStorage.setItem('dailyColorsInTray', JSON.stringify(value)));
+  dailyTime.subscribe((value) => localStorage.setItem('dailyTime', JSON.stringify(value)));
+  dailyGameNumber.subscribe((value) => localStorage.setItem('dailyGameNumber', JSON.stringify(value)));
 
   // General
 
   mode.subscribe((value) => localStorage.setItem('mode', value));
 }
 
-
-
-export const timeString = writable('00:00');
-
 export const getNewPracticeGame = writable(false);
 export const getDailyGame = writable(false);
-
-export const dailyGameNumber = writable(0);

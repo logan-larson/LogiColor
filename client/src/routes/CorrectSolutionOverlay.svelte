@@ -31,14 +31,14 @@
 				navigator
 					.share({
 						title: `Daily Logicolor`,
-						text: `Daily Puzzle #${currentDailyGameNumber}\nI solved the puzzle in ${time}!`,
-						url: 'https://logicolor.fun',
+						text: `Daily Puzzle #${currentDailyGameNumber}\nlogicolor.fun\nI solved the puzzle in ${time}!`,
+						// url: 'https://logicolor.fun',
 					})
 					.then(() => console.log('Successful share'))
 					.catch((error) => console.log('Error sharing', error));
 			} else {
 				navigator.clipboard.writeText(
-					`Daily Puzzle #${currentDailyGameNumber}\nI solved the puzzle in ${time}!\nAt http://logicolor.fun`
+					`Daily Puzzle #${currentDailyGameNumber}\nlogicolor.fun\nI solved the puzzle in ${time}!`
 				);
 				alert('Copied results to your clipboard!');
 			}
@@ -47,14 +47,14 @@
 				navigator
 					.share({
 						title: 'Practice Logicolor',
-						text: `Practice Puzzle\nI solved the puzzle in ${time}!`,
-						url: 'https://logicolor.fun',
+						text: `Practice Puzzle\nlogicolor.fun\nI solved the puzzle in ${time}!`,
+						// url: 'https://logicolor.fun',
 					})
 					.then(() => console.log('Successful share'))
 					.catch((error) => console.log('Error sharing', error));
 			} else {
 				navigator.clipboard.writeText(
-					`Practice Puzzle\nI solved the puzzle in ${time}!\nAt http://logicolor.fun`
+					`Practice Puzzle\nlogicolor.fun\nI solved the puzzle in ${time}!`
 				);
 				alert('Copied results to your clipboard!');
 			}
