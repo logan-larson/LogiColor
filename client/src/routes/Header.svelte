@@ -204,6 +204,19 @@
 </script>
 
 <div id="header">
+	<!-- Banner -->
+	<ins
+		id="banner"
+		class="adsbygoogle"
+		style="display:block; height: 50px;"
+		data-ad-client="ca-pub-1159092486699621"
+		data-ad-slot="8672468415"
+		data-ad-format="auto"
+		data-full-width-responsive="true"
+	/>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
 	<div id="mode">
 		<button
 			id="daily"
@@ -259,7 +272,10 @@
 		align-items: center;
 		padding: 8px;
 		color: #fff;
-		margin-top: 50px;
+	}
+
+	#banner {
+		grid-column: 1 / 4;
 	}
 
 	#mode {
