@@ -18,6 +18,7 @@ async function newGame() {
 
   dailyGames.push(newGame);
 
+  // Local path (localhost)
   // writeFile("./daily-games.json", JSON.stringify(dailyGames), (err) => {
   writeFile("/root/ColorPuzzleApp/server/daily-games.json", JSON.stringify(dailyGames), (err) => {
     if (err) {

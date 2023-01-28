@@ -1,12 +1,13 @@
 <script>
 	import {
+		dailyUserSolution,
 		practiceColorsInTray,
 		practiceGame,
 		practiceUserSolution,
 	} from '../stores/game.js';
 	import { practiceGameState } from '../stores/game.js';
 	import { dailyGame } from '../stores/game.js';
-	import { dailyGameState } from '../stores/game.js';
+	import { dailyGameState, dailyColorsInTray } from '../stores/game.js';
 	import {
 		isCorrectSolutionOverlayOpen,
 		isIncorrectSolutionOverlayOpen,
@@ -110,6 +111,9 @@
 	async function getDailyGameFromServer() {
 		dailyGameState.set('loading');
 
+		dailyUserSolution.set([]);
+		dailyColorsInTray.set([]);
+
 		dailyGame.set({
 			puzzle: [],
 			solution: [],
@@ -190,14 +194,34 @@
 				isNewGameOverlayOpen.set(true);
 			}
 		} else if (currentMode == 'daily') {
-			if (currentDailyGameState == 'paused') {
-				pauseGame();
-			} else if (currentDailyGameState == 'solved') {
-				isCorrectSolutionOverlayOpen.set(true);
-			} else if (currentDailyGameState == 'unsolved') {
-				isIncorrectSolutionOverlayOpen.set(true);
-			} else if (currentDailyGameState == 'loading') {
-				isNewGameOverlayOpen.set(true);
+			const res = await fetch('https://logicolor.fun/dailygame');
+			// const res = await fetch('http://localhost:5000/dailygame');
+
+			const g = await res.json();
+
+			if (g.number == $dailyGameNumber) {
+				if (currentDailyGameState == 'paused') {
+					pauseGame();
+				} else if (currentDailyGameState == 'solved') {
+					isCorrectSolutionOverlayOpen.set(true);
+				} else if (currentDailyGameState == 'unsolved') {
+					isIncorrectSolutionOverlayOpen.set(true);
+				} else if (currentDailyGameState == 'loading') {
+					isNewGameOverlayOpen.set(true);
+				}
+			} else {
+				dailyGame.set({
+					puzzle: ['', '', '', '', '', '', '', '', '', '', '', ''],
+					solution: [],
+					clues: [],
+					unknownColors: [],
+				});
+
+				dailyGameState.set('notStarted');
+				dailyTime.set(0);
+
+				dailyUserSolution.set([]);
+				dailyColorsInTray.set([]);
 			}
 		}
 	});
