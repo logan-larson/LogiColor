@@ -22,7 +22,7 @@
 			case 'MINT':
 				return '#62BFA7';
 			case 'EMERALD':
-				return '#688C51';
+				return '#46A44D';
 			case 'MAGENTA':
 				return '#E8108C';
 			case 'MUSTARD':
