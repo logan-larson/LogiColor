@@ -95,12 +95,20 @@
 	li {
 		margin: 3px 0px;
 		font-size: 20px;
+		font-size: max(12px, 2.5vmin);
 	}
 
 	h1 {
 		margin: 10px 0px 0px;
 		font-size: 20px;
 		text-align: center;
+	}
+
+	/*
+	@media (min-height: 600px) {
+		li {
+			font-size: 24px;
+		}
 	}
 
 	@media (max-width: 600px) {
@@ -112,6 +120,7 @@
 			font-size: 14px;
 		}
 	}
+		*/
 
 	.click-button {
 		margin: 10px auto 0px;

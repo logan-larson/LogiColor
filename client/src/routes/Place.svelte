@@ -178,21 +178,15 @@
 
 <style>
 	div {
-		width: 10vmax;
-		max-width: 100px;
-		height: 10vmax;
-		max-height: 100px;
+		width: 10vmin;
+		min-width: 60px;
+		height: 10vmin;
+		min-height: 60px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		border-radius: 8px;
 		place-self: center;
 		user-select: none;
-	}
-
-	@media (max-width: 500px) {
-		div {
-			font-size: 8px;
-		}
 	}
 </style>
