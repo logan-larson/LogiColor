@@ -14,7 +14,7 @@
 		isNewGameOverlayOpen,
 	} from '../stores/overlay.js';
 	import { isPauseOverlayOpen } from '../stores/overlay.js';
-	import { isHelpOverlayOpen } from '../stores/overlay.js';
+	import { isHelpOverlayOpen, firstTime } from '../stores/overlay.js';
 	import { mode } from '../stores/game.js';
 	import { timeString } from '../stores/game.js';
 	import { getNewPracticeGame } from '../stores/game.js';
@@ -183,6 +183,10 @@
 	}
 
 	onMount(async () => {
+		if ($firstTime) {
+			isHelpOverlayOpen.set(true);
+		}
+
 		if (currentMode == 'practice') {
 			if (currentPracticeGameState == 'paused') {
 				pauseGame();
