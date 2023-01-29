@@ -187,6 +187,26 @@
 			isHelpOverlayOpen.set(true);
 		}
 
+		const res = await fetch('https://logicolor.fun/dailygame');
+		// const res = await fetch('http://localhost:5000/dailygame');
+
+		const g = await res.json();
+
+		if (g.number != $dailyGameNumber) {
+			dailyGame.set({
+				puzzle: ['', '', '', '', '', '', '', '', '', '', '', ''],
+				solution: [],
+				clues: [],
+				unknownColors: [],
+			});
+
+			dailyGameState.set('notStarted');
+			dailyTime.set(0);
+
+			dailyUserSolution.set([]);
+			dailyColorsInTray.set([]);
+		}
+
 		if (currentMode == 'practice') {
 			if (currentPracticeGameState == 'paused') {
 				pauseGame();
@@ -197,35 +217,15 @@
 			} else if (currentPracticeGameState == 'loading') {
 				getNewGame();
 			}
-		} else if (currentMode == 'daily') {
-			const res = await fetch('https://logicolor.fun/dailygame');
-			// const res = await fetch('http://localhost:5000/dailygame');
-
-			const g = await res.json();
-
-			if (g.number == $dailyGameNumber) {
-				if (currentDailyGameState == 'paused') {
-					pauseGame();
-				} else if (currentDailyGameState == 'solved') {
-					isCorrectSolutionOverlayOpen.set(true);
-				} else if (currentDailyGameState == 'unsolved') {
-					isIncorrectSolutionOverlayOpen.set(true);
-				} else if (currentDailyGameState == 'loading') {
-					getDailyGameFromServer();
-				}
-			} else {
-				dailyGame.set({
-					puzzle: ['', '', '', '', '', '', '', '', '', '', '', ''],
-					solution: [],
-					clues: [],
-					unknownColors: [],
-				});
-
-				dailyGameState.set('notStarted');
-				dailyTime.set(0);
-
-				dailyUserSolution.set([]);
-				dailyColorsInTray.set([]);
+		} else if (currentMode == 'daily' && g.number == $dailyGameNumber) {
+			if (currentDailyGameState == 'paused') {
+				pauseGame();
+			} else if (currentDailyGameState == 'solved') {
+				isCorrectSolutionOverlayOpen.set(true);
+			} else if (currentDailyGameState == 'unsolved') {
+				isIncorrectSolutionOverlayOpen.set(true);
+			} else if (currentDailyGameState == 'loading') {
+				getDailyGameFromServer();
 			}
 		}
 	});
