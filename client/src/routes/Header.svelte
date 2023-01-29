@@ -195,7 +195,7 @@
 			} else if (currentPracticeGameState == 'unsolved') {
 				isIncorrectSolutionOverlayOpen.set(true);
 			} else if (currentPracticeGameState == 'loading') {
-				isNewGameOverlayOpen.set(true);
+				getNewGame();
 			}
 		} else if (currentMode == 'daily') {
 			const res = await fetch('https://logicolor.fun/dailygame');
@@ -211,7 +211,7 @@
 				} else if (currentDailyGameState == 'unsolved') {
 					isIncorrectSolutionOverlayOpen.set(true);
 				} else if (currentDailyGameState == 'loading') {
-					isNewGameOverlayOpen.set(true);
+					getDailyGameFromServer();
 				}
 			} else {
 				dailyGame.set({
