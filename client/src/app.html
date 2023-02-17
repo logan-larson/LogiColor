@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/Logo.png" />
-		<meta name="viewport" content="width=device-width" />
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZX230R8DBP"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
 
-			gtag('config', 'G-ZX230R8DBP');
-		</script>
-		<title>Logicolor</title>
-		%sveltekit.head%
-	</head>
-	<body style="background-color: #252524; margin: 0; height: 100%; overflow: hidden; font-family: Arial, Helvetica, sans-serif; font-weight: 600;" data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="%sveltekit.assets%/Logo.png" />
+	<meta name="viewport" content="width=device-width" />
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZX230R8DBP"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'G-ZX230R8DBP');
+	</script>
+	<title>LogiColor</title>
+	%sveltekit.head%
+</head>
+
+<body
+	style="background-color: #252524; margin: 0; height: 100%; overflow: hidden; font-family: Arial, Helvetica, sans-serif; font-weight: 600;"
+	data-sveltekit-preload-data="hover">
+	<div style="display: contents">%sveltekit.body%</div>
+</body>
+
 </html>
