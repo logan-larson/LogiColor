@@ -1,14 +1,16 @@
-import { getNewGame } from "./generator/gameGenerator.js";
-import { readFileSync, writeFile } from "fs";
+import { getNewGame } from './generator/gameGenerator.js';
+import { readFileSync, writeFile } from 'fs';
 
 async function newGame() {
-
   let dailyGames = [];
 
   try {
     // Local path (localhost)
-    // let data = readFileSync("./daily-games.json", "utf8");
-    let data = readFileSync("/root/ColorPuzzleApp/server/daily-games.json", "utf8");
+    // let data = readFileSync('./daily-games.json', 'utf8');
+    let data = readFileSync(
+      '/root/ColorPuzzleApp/server/daily-games.json',
+      'utf8'
+    );
     dailyGames = JSON.parse(data);
   } catch (err) {
     console.error(err);
@@ -19,13 +21,16 @@ async function newGame() {
   dailyGames.push(newGame);
 
   // Local path (localhost)
-  // writeFile("./daily-games.json", JSON.stringify(dailyGames), (err) => {
-  writeFile("/root/ColorPuzzleApp/server/daily-games.json", JSON.stringify(dailyGames), (err) => {
-    if (err) {
-      console.log(err);
+  // writeFile('./daily-games.json', JSON.stringify(dailyGames), (err) => {
+  writeFile(
+    '/root/ColorPuzzleApp/server/daily-games.json',
+    JSON.stringify(dailyGames),
+    (err) => {
+      if (err) {
+        console.log(err);
+      }
     }
-  });
-
+  );
 }
 
 newGame();

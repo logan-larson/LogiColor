@@ -1,355 +1,406 @@
 <script>
-	import {
-		dailyUserSolution,
-		practiceColorsInTray,
-		practiceGame,
-		practiceUserSolution,
-	} from '../stores/game.js';
-	import { practiceGameState } from '../stores/game.js';
-	import { dailyGame } from '../stores/game.js';
-	import { dailyGameState, dailyColorsInTray } from '../stores/game.js';
-	import {
-		isCorrectSolutionOverlayOpen,
-		isIncorrectSolutionOverlayOpen,
-		isNewGameOverlayOpen,
-	} from '../stores/overlay.js';
-	import { isPauseOverlayOpen } from '../stores/overlay.js';
-	import { isHelpOverlayOpen, firstTime } from '../stores/overlay.js';
-	import { mode } from '../stores/game.js';
-	import { timeString } from '../stores/game.js';
-	import { getNewPracticeGame } from '../stores/game.js';
-	import { getDailyGame } from '../stores/game.js';
-	import { onMount } from 'svelte';
-	import { dailyGameNumber } from '../stores/game.js';
-	import { practiceTime } from '../stores/game.js';
-	import { dailyTime } from '../stores/game.js';
-	import { browser } from '$app/environment';
+  import {
+    dailyUserSolution,
+    practiceColorsInTray,
+    practiceGame,
+    practiceUserSolution,
+  } from '../stores/game.js';
+  import { practiceGameState } from '../stores/game.js';
+  import { dailyGame } from '../stores/game.js';
+  import { dailyGameState, dailyColorsInTray } from '../stores/game.js';
+  import {
+    isCorrectSolutionOverlayOpen,
+    isIncorrectSolutionOverlayOpen,
+    isNewGameOverlayOpen,
+  } from '../stores/overlay.js';
+  import { isPauseOverlayOpen } from '../stores/overlay.js';
+  import { isHelpOverlayOpen, firstTime } from '../stores/overlay.js';
+  import { mode } from '../stores/game.js';
+  import { timeString } from '../stores/game.js';
+  import { getNewPracticeGame } from '../stores/game.js';
+  import { getDailyGame } from '../stores/game.js';
+  import { onMount } from 'svelte';
+  import { dailyGameNumber } from '../stores/game.js';
+  import { practiceTime } from '../stores/game.js';
+  import { dailyTime } from '../stores/game.js';
 
-	let currentMode = 'daily';
+  let secure = 'https';
+  let port = '';
 
-	let currentPracticeGameState = 'notStarted';
+  let logo = '';
 
-	let currentPracticeTime = 0;
-	let currentDailyTime = 0;
+  let currentMode = 'daily';
 
-	practiceTime.subscribe((t) => {
-		currentPracticeTime = t;
-	});
+  let currentPracticeGameState = 'notStarted';
 
-	dailyTime.subscribe((t) => {
-		currentDailyTime = t;
-	});
+  let currentPracticeTime = 0;
+  let currentDailyTime = 0;
 
-	practiceGameState.subscribe((s) => {
-		currentPracticeGameState = s;
+  practiceTime.subscribe((t) => {
+    currentPracticeTime = t;
+  });
 
-		if ($mode == 'practice' && currentPracticeGameState == 'solved') {
-			timeString.set(formatTime(currentPracticeTime));
-		}
-	});
+  dailyTime.subscribe((t) => {
+    currentDailyTime = t;
+  });
 
-	let currentDailyGameState = 'notStarted';
+  practiceGameState.subscribe((s) => {
+    currentPracticeGameState = s;
 
-	dailyGameState.subscribe((s) => {
-		currentDailyGameState = s;
+    if ($mode == 'practice' && currentPracticeGameState == 'solved') {
+      timeString.set(formatTime(currentPracticeTime));
+    }
+  });
 
-		if ($mode == 'daily' && currentDailyGameState == 'solved') {
-			timeString.set(formatTime(currentDailyTime));
-		}
-	});
+  let currentDailyGameState = 'notStarted';
 
-	mode.subscribe(async (m) => {
-		currentMode = m;
+  dailyGameState.subscribe((s) => {
+    currentDailyGameState = s;
 
-		if (currentMode == 'practice') {
-			if (currentPracticeGameState == 'solved') {
-				timeString.set(formatTime(currentPracticeTime));
-				isCorrectSolutionOverlayOpen.set(true);
-			} else if (currentPracticeGameState == 'unsolved') {
-				practiceGameState.set('playing');
-			}
-		} else if (currentMode == 'daily') {
-			if (currentDailyGameState == 'solved') {
-				timeString.set(formatTime(currentDailyTime));
-				isCorrectSolutionOverlayOpen.set(true);
-			} else if (currentDailyGameState == 'unsolved') {
-				dailyGameState.set('playing');
-			}
-		}
-	});
+    if ($mode == 'daily' && currentDailyGameState == 'solved') {
+      timeString.set(formatTime(currentDailyTime));
+    }
+  });
 
-	setInterval(function () {
-		if (currentMode == 'practice' && currentPracticeGameState == 'playing') {
-			practiceTime.update((n) => n + 1);
-		} else if (currentMode == 'daily' && currentDailyGameState == 'playing') {
-			dailyTime.update((n) => n + 1);
-		}
-	}, 1000);
+  mode.subscribe(async (m) => {
+    currentMode = m;
 
-	function setDaily() {
-		mode.set('daily');
-	}
+    if (currentMode == 'practice') {
+      if (currentPracticeGameState == 'solved') {
+        timeString.set(formatTime(currentPracticeTime));
+        isCorrectSolutionOverlayOpen.set(true);
+      } else if (currentPracticeGameState == 'unsolved') {
+        practiceGameState.set('playing');
+      }
+    } else if (currentMode == 'daily') {
+      if (currentDailyGameState == 'solved') {
+        timeString.set(formatTime(currentDailyTime));
+        isCorrectSolutionOverlayOpen.set(true);
+      } else if (currentDailyGameState == 'unsolved') {
+        dailyGameState.set('playing');
+      }
+    }
+  });
 
-	function setPractice() {
-		mode.set('practice');
-	}
+  setInterval(function () {
+    if (currentMode == 'practice' && currentPracticeGameState == 'playing') {
+      practiceTime.update((n) => n + 1);
+    } else if (currentMode == 'daily' && currentDailyGameState == 'playing') {
+      dailyTime.update((n) => n + 1);
+    }
+  }, 1000);
 
-	getNewPracticeGame.subscribe((p) => {
-		if (p) {
-			getNewGame();
-			getNewPracticeGame.set(false);
-		}
-	});
+  function setDaily() {
+    mode.set('daily');
+  }
 
-	getDailyGame.subscribe((p) => {
-		if (p) {
-			getDailyGameFromServer();
-			getDailyGame.set(false);
-		}
-	});
+  function setPractice() {
+    mode.set('practice');
+  }
 
-	async function getDailyGameFromServer() {
-		dailyGameState.set('loading');
+  getNewPracticeGame.subscribe((p) => {
+    if (p) {
+      getNewGame();
+      getNewPracticeGame.set(false);
+    }
+  });
 
-		dailyUserSolution.set([]);
-		dailyColorsInTray.set([]);
+  getDailyGame.subscribe((p) => {
+    if (p) {
+      getDailyGameFromServer();
+      getDailyGame.set(false);
+    }
+  });
 
-		dailyGame.set({
-			puzzle: [],
-			solution: [],
-			clues: [],
-			unknownColors: [],
-		});
-		isNewGameOverlayOpen.set(true);
+  async function getDailyGameFromServer() {
+    dailyGameState.set('loading');
 
-		// const res = await fetch('http://localhost:5000/dailygame');
-		const res = await fetch('https://logicolor.fun/dailygame');
+    dailyUserSolution.set([]);
+    dailyColorsInTray.set([]);
 
-		const g = await res.json();
+    dailyGame.set({
+      puzzle: [],
+      solution: [],
+      clues: [],
+      unknownColors: [],
+    });
+    isNewGameOverlayOpen.set(true);
 
-		dailyGame.set(g.game);
+    const res = await fetch(
+      `${secure}://${window.location.hostname}${port}/dailygame`
+    );
+    //const res = await fetch('https://logicolor.fun/dailygame');
 
-		dailyGameNumber.set(g.number);
+    const g = await res.json();
 
-		dailyTime.set(0);
-	}
+    dailyGame.set(g.game);
 
-	async function getNewGame() {
-		practiceGameState.set('loading');
+    dailyGameNumber.set(g.number);
 
-		practiceUserSolution.set([]);
-		practiceColorsInTray.set([]);
+    dailyTime.set(0);
+  }
 
-		practiceGame.set({
-			puzzle: [],
-			solution: [],
-			clues: [],
-			unknownColors: [],
-		});
-		isNewGameOverlayOpen.set(true);
+  async function getNewGame() {
+    practiceGameState.set('loading');
 
-		// const res = await fetch('http://localhost:5000/newgame');
-		const res = await fetch('https://logicolor.fun/newgame');
+    practiceUserSolution.set([]);
+    practiceColorsInTray.set([]);
 
-		const g = await res.json();
+    practiceGame.set({
+      puzzle: [],
+      solution: [],
+      clues: [],
+      unknownColors: [],
+    });
+    isNewGameOverlayOpen.set(true);
 
-		practiceGame.set(g);
+    const res = await fetch(
+      `${secure}://${window.location.hostname}${port}/newgame`
+    );
 
-		practiceTime.set(0);
-	}
+    const g = await res.json();
 
-	/**
-	 * @param {number} t
-	 */
-	function formatTime(t) {
-		var date = new Date(0);
-		date.setSeconds(t);
-		var timeStr = date.toISOString().substring(14, 19);
-		return timeStr;
-	}
+    practiceGame.set(g);
 
-	function pauseGame() {
-		if (currentMode == 'daily') {
-			dailyGameState.set('paused');
-		} else if (currentMode == 'practice') {
-			practiceGameState.set('paused');
-		}
-		isPauseOverlayOpen.set(true);
-	}
+    practiceTime.set(0);
+  }
 
-	function openHelp() {
-		//isHelpOverlayOpen.set(true);
-		window.open('help.pdf', '_blank');
-	}
+  /**
+   * @param {number} t
+   */
+  function formatTime(t) {
+    var date = new Date(0);
+    date.setSeconds(t);
+    var timeStr = date.toISOString().substring(14, 19);
+    return timeStr;
+  }
 
-	onMount(async () => {
-		if ($firstTime) {
-			isHelpOverlayOpen.set(true);
-		}
+  function pauseGame() {
+    if (currentMode == 'daily') {
+      dailyGameState.set('paused');
+    } else if (currentMode == 'practice') {
+      practiceGameState.set('paused');
+    }
+    isPauseOverlayOpen.set(true);
+  }
 
-		const res = await fetch('https://logicolor.fun/dailygame');
-		// const res = await fetch('http://localhost:5000/dailygame');
+  function openHelp() {
+    //isHelpOverlayOpen.set(true);
+    window.open('help.pdf', '_blank');
+  }
 
-		const g = await res.json();
+  onMount(async () => {
+    secure = window.location.hostname == 'localhost' ? 'http' : 'https';
+    port = window.location.hostname == 'localhost' ? ':5000' : '';
 
-		if (g.number != $dailyGameNumber) {
-			dailyGame.set({
-				puzzle: ['', '', '', '', '', '', '', '', '', '', '', ''],
-				solution: [],
-				clues: [],
-				unknownColors: [],
-			});
+    fetch(`${secure}://${window.location.hostname}${port}/logo`)
+      .then((res) => res.blob())
+      .then((l) => {
+        logo = URL.createObjectURL(l);
+      });
 
-			dailyGameState.set('notStarted');
-			dailyTime.set(0);
+    if ($firstTime) {
+      isHelpOverlayOpen.set(true);
+    }
 
-			dailyUserSolution.set([]);
-			dailyColorsInTray.set([]);
-		}
+    const res = await fetch(
+      `${secure}://${window.location.hostname}${port}/dailygame`
+    );
 
-		if (currentMode == 'practice') {
-			if (currentPracticeGameState == 'paused') {
-				pauseGame();
-			} else if (currentPracticeGameState == 'solved') {
-				isCorrectSolutionOverlayOpen.set(true);
-			} else if (currentPracticeGameState == 'unsolved') {
-				isIncorrectSolutionOverlayOpen.set(true);
-			} else if (currentPracticeGameState == 'loading') {
-				getNewGame();
-			}
-		} else if (currentMode == 'daily' && g.number == $dailyGameNumber) {
-			if (currentDailyGameState == 'paused') {
-				pauseGame();
-			} else if (currentDailyGameState == 'solved') {
-				isCorrectSolutionOverlayOpen.set(true);
-			} else if (currentDailyGameState == 'unsolved') {
-				isIncorrectSolutionOverlayOpen.set(true);
-			} else if (currentDailyGameState == 'loading') {
-				getDailyGameFromServer();
-			}
-		}
-	});
+    const g = await res.json();
+
+    if (g.number != $dailyGameNumber) {
+      dailyGame.set({
+        puzzle: ['', '', '', '', '', '', '', '', '', '', '', ''],
+        solution: [],
+        clues: [],
+        unknownColors: [],
+      });
+
+      dailyGameState.set('notStarted');
+      dailyTime.set(0);
+
+      dailyUserSolution.set([]);
+      dailyColorsInTray.set([]);
+    }
+
+    if (currentMode == 'practice') {
+      if (currentPracticeGameState == 'paused') {
+        pauseGame();
+      } else if (currentPracticeGameState == 'solved') {
+        isCorrectSolutionOverlayOpen.set(true);
+      } else if (currentPracticeGameState == 'unsolved') {
+        isIncorrectSolutionOverlayOpen.set(true);
+      } else if (currentPracticeGameState == 'loading') {
+        getNewGame();
+      }
+    } else if (currentMode == 'daily' && g.number == $dailyGameNumber) {
+      if (currentDailyGameState == 'paused') {
+        pauseGame();
+      } else if (currentDailyGameState == 'solved') {
+        isCorrectSolutionOverlayOpen.set(true);
+      } else if (currentDailyGameState == 'unsolved') {
+        isIncorrectSolutionOverlayOpen.set(true);
+      } else if (currentDailyGameState == 'loading') {
+        getDailyGameFromServer();
+      }
+    }
+  });
 </script>
 
+<div id="logo">
+  <img src={logo} alt="Logicolor" />
+  <h2>LogiColor</h2>
+</div>
 <div id="header">
-	<div id="mode">
-		<button
-			id="daily"
-			on:click={setDaily}
-			class={currentMode == 'daily'
-				? 'toggle-button selected'
-				: 'toggle-button not-selected'}
-		>
-			Daily
-		</button>
-		<button
-			id="practice"
-			on:click={setPractice}
-			class={currentMode == 'practice'
-				? 'toggle-button selected'
-				: 'toggle-button not-selected'}
-		>
-			Practice
-		</button>
-	</div>
-	<div id="timer">
-		{#if currentMode === 'daily'}
-			<p>
-				{formatTime(currentDailyTime)}
-			</p>
-			{#if currentDailyGameState === 'playing'}
-				<button id="pause-button" on:click={pauseGame} class="click-button"
-					>Pause</button
-				>
-			{/if}
-		{:else}
-			<p>
-				{formatTime(currentPracticeTime)}
-			</p>
-			{#if currentPracticeGameState === 'playing'}
-				<button id="pause-button" on:click={pauseGame} class="click-button"
-					>Pause</button
-				>
-			{/if}
-		{/if}
-	</div>
-	<div id="help">
-		<button class="click-button" on:click={openHelp}>Help</button>
-	</div>
+  <div id="mode">
+    <button
+      id="daily"
+      on:click={setDaily}
+      class={currentMode == 'daily'
+        ? 'toggle-button selected'
+        : 'toggle-button not-selected'}
+    >
+      Daily
+    </button>
+    <button
+      id="practice"
+      on:click={setPractice}
+      class={currentMode == 'practice'
+        ? 'toggle-button selected'
+        : 'toggle-button not-selected'}
+    >
+      Practice
+    </button>
+  </div>
+  <div id="timer">
+    {#if currentMode === 'daily'}
+      <p>
+        {formatTime(currentDailyTime)}
+      </p>
+      {#if currentDailyGameState === 'playing'}
+        <button id="pause-button" on:click={pauseGame} class="click-button"
+          >Pause</button
+        >
+      {/if}
+    {:else}
+      <p>
+        {formatTime(currentPracticeTime)}
+      </p>
+      {#if currentPracticeGameState === 'playing'}
+        <button id="pause-button" on:click={pauseGame} class="click-button"
+          >Pause</button
+        >
+      {/if}
+    {/if}
+  </div>
+  <div id="help">
+    <button class="click-button" on:click={openHelp}>Help</button>
+  </div>
 </div>
 
 <style>
-	#header {
-		background-color: #2e2f2f;
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		justify-items: center;
-		align-items: center;
-		padding: 8px;
-		color: #fff;
-	}
+  #logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2e2f2f;
+    gap: 10px;
+    padding-top: 5px;
+  }
 
-	#mode {
-		display: flex;
-		align-items: center;
-	}
+  #logo h2 {
+    color: white;
+    margin: 0px;
+  }
 
-	#timer {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
+  #logo img {
+    width: 28px;
+  }
 
-	#timer p {
-		margin: 0px 10px;
-	}
+  @media (max-width: 600px) {
+    #logo h2 {
+      color: white;
+      margin: 0px;
+      font-size: 16px;
+    }
 
-	#help {
-		display: flex;
-	}
+    #logo img {
+      width: 20px;
+    }
+  }
 
-	.click-button {
-		border: none;
-		padding: 10px;
-		border-radius: 8px;
-		cursor: pointer;
-		font-weight: 600;
-		background-color: #6b6b6b;
-		color: #d6d6d6;
-	}
+  #header {
+    background-color: #2e2f2f;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    padding: 8px;
+    color: #fff;
+  }
 
-	.click-button:hover {
-		background-color: #575757;
-		color: #fff;
-	}
+  #mode {
+    display: flex;
+    align-items: center;
+  }
 
-	@media (max-width: 600px) {
-		.toggle-button {
-			padding: 7px;
-			font-size: 12px;
-		}
+  #timer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-		.click-button {
-			padding: 7px;
-			font-size: 12px;
-		}
-	}
+  #timer p {
+    margin: 0px 10px;
+  }
 
-	.toggle-button {
-		border: none;
-		padding: 10px;
-		border-radius: 8px;
-		cursor: pointer;
-		font-weight: 600;
-	}
+  #help {
+    display: flex;
+  }
 
-	.selected {
-		background-color: #6b6b6b;
-		color: #fff;
-	}
+  .click-button {
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    background-color: #6b6b6b;
+    color: #d6d6d6;
+  }
 
-	.not-selected {
-		background-color: #2e2f2f;
-		color: #d6d6d6;
-	}
+  .click-button:hover {
+    background-color: #575757;
+    color: #fff;
+  }
+
+  @media (max-width: 600px) {
+    .toggle-button {
+      padding: 7px;
+      font-size: 12px;
+    }
+
+    .click-button {
+      padding: 7px;
+      font-size: 12px;
+    }
+  }
+
+  .toggle-button {
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .selected {
+    background-color: #6b6b6b;
+    color: #fff;
+  }
+
+  .not-selected {
+    background-color: #2e2f2f;
+    color: #d6d6d6;
+  }
 </style>
