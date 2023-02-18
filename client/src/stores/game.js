@@ -66,20 +66,22 @@ if (browser) {
 
 // -------------------- Practice --------------------
 
-export const practiceGame = writable(localStoragePracticeGame || { puzzle: [
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-], solution: [], clues: [], unknownColors: [] });
+export const practiceGame = writable(localStoragePracticeGame || {
+  puzzle: [
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+  ], solution: [], clues: [], unknownColors: []
+});
 
 export const practiceUserSolution = writable(localStoragePracticeUserSolution || [
   '',
@@ -109,20 +111,22 @@ export const practiceTime = writable(localStoragePracticeTime || 0);
 
 // -------------------- Daily --------------------
 
-export const dailyGame = writable(localStorageDailyGame || { puzzle: [
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-  '',
-], solution: [], clues: [], unknownColors: [] });
+export const dailyGame = writable(localStorageDailyGame || {
+  puzzle: [
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+  ], solution: [], clues: [], unknownColors: []
+});
 
 export const dailyUserSolution = writable(localStorageDailyUserSolution || []);
 
@@ -152,7 +156,7 @@ if (browser) {
 
   practiceGame.subscribe((value) => localStorage.setItem('practiceGame', JSON.stringify(value)));
   practiceUserSolution.subscribe((value) => localStorage.setItem('practiceUserSolution', JSON.stringify(value)));
-  practiceGameState.subscribe((value) => localStorage.setItem('practiceGameState', value ));
+  practiceGameState.subscribe((value) => localStorage.setItem('practiceGameState', value));
   practiceColorsInTray.subscribe((value) => localStorage.setItem('practiceColorsInTray', JSON.stringify(value)));
   practiceTime.subscribe((value) => localStorage.setItem('practiceTime', JSON.stringify(value)));
 
@@ -171,4 +175,5 @@ if (browser) {
 }
 
 export const getNewPracticeGame = writable(false);
+export const getNewHardPracticeGame = writable(false);
 export const getDailyGame = writable(false);

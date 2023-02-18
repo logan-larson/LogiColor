@@ -2,6 +2,7 @@
 	import { practiceGame } from '../stores/game.js';
 	import { dailyGame } from '../stores/game.js';
 	import { getNewPracticeGame } from '../stores/game.js';
+	import { getNewHardPracticeGame } from '../stores/game.js';
 	import { getDailyGame } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
 	import { dailyGameNumber } from '../stores/game.js';
@@ -44,15 +45,24 @@
 	});
 </script>
 
-<div>
+<div class="container">
 	{#if currentMode == 'practice'}
-		<button
-			id="new-practice-game"
-			on:click={() => {
-				getNewPracticeGame.set(true);
-			}}
-			class="click-button">Create New Game</button
-		>
+		<div class="new-games-container">
+			<button
+				id="new-practice-game"
+				on:click={() => {
+					getNewPracticeGame.set(true);
+				}}
+				class="click-button">Create New Game</button
+			>
+			<button
+				id="new-hard-game"
+				on:click={() => {
+					getNewHardPracticeGame.set(true);
+				}}
+				class="click-button">Create New Hard Game</button
+			>
+		</div>
 	{:else if currentMode == 'daily'}
 		{#if currentDailyGameState == 'notStarted'}
 			<button
@@ -80,11 +90,18 @@
 </div>
 
 <style>
-	div {
+	.container {
 		color: #fff;
 		display: flex;
 		flex-direction: column;
 		font-weight: 500;
+	}
+
+	.new-games-container {
+		margin-top: 5px;
+		display: flex;
+		justify-content: center;
+		gap: 10px;
 	}
 
 	ol {
@@ -121,7 +138,6 @@
 	}
 
 	.click-button {
-		margin: 10px auto 0px;
 		border: none;
 		padding: 10px;
 		border-radius: 8px;

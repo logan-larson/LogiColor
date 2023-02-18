@@ -37,6 +37,13 @@ public class Generator {
 
     public static void main(String[] args) throws InterruptedException {
 
+
+        boolean isHardMode = false;
+
+        if (args.length == 1) {
+            isHardMode = args[0].equals("hard");
+        }
+
         boolean isPhysical = false;
 
         Scanner scanner = new Scanner(System.in);
@@ -115,7 +122,7 @@ public class Generator {
 
             // Generate the clues
             ConstraintSatisfactionProblem csp = new ConstraintSatisfactionProblem(puzzle, solution, colorsToRemove,
-                    constraints);
+                    constraints, isHardMode);
 
             ArrayList<Constraint> clues = csp.getClues();
 
