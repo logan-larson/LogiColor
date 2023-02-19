@@ -8,7 +8,7 @@ async function newGame() {
     // Local path (localhost)
     // let data = readFileSync('./daily-games.json', 'utf8');
     let data = readFileSync(
-      '/root/ColorPuzzleApp/server/daily-games.json',
+      '/root/LogiColor/server/daily-games.json',
       'utf8'
     );
     dailyGames = JSON.parse(data);
@@ -23,7 +23,7 @@ async function newGame() {
   // Local path (localhost)
   // writeFile('./daily-games.json', JSON.stringify(dailyGames), (err) => {
   writeFile(
-    '/root/ColorPuzzleApp/server/daily-games.json',
+    '/root/LogiColor/server/daily-games.json',
     JSON.stringify(dailyGames),
     (err) => {
       if (err) {
