@@ -46,8 +46,9 @@
 </script>
 
 <div class="container">
-	{#if currentMode == 'practice'}
-		<div class="new-games-container">
+	<div class="new-games-container">
+		{#if currentMode == 'practice'}
+			<!-- <div class="new-games-container"> -->
 			<button
 				id="new-practice-game"
 				on:click={() => {
@@ -62,20 +63,21 @@
 				}}
 				class="click-button">Create New Hard Game</button
 			>
-		</div>
-	{:else if currentMode == 'daily'}
-		{#if currentDailyGameState == 'notStarted'}
-			<button
-				id="new-daily-game"
-				on:click={() => {
-					getDailyGame.set(true);
-				}}
-				class="click-button">Play Daily Game</button
-			>
-		{:else}
-			<h1>Day {currentDailyGameNumber}</h1>
+			<!-- </div> -->
+		{:else if currentMode == 'daily'}
+			{#if currentDailyGameState == 'notStarted'}
+				<button
+					id="new-daily-game"
+					on:click={() => {
+						getDailyGame.set(true);
+					}}
+					class="click-button">Play Daily Game</button
+				>
+			{:else}
+				<h1>Day {currentDailyGameNumber}</h1>
+			{/if}
 		{/if}
-	{/if}
+	</div>
 	<ol>
 		{#if currentMode == 'practice' && currentPracticeGame != undefined}
 			{#each currentPracticeGame.clues as clue}
