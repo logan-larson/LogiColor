@@ -123,9 +123,13 @@
 		text-align: center;
 	}
 
-	@media (min-height: 600px) {
+	@media (max-width: 900px) {
 		li {
-			font-size: 24px;
+			font-size: 16px;
+		}
+
+		h1 {
+			font-size: 16px;
 		}
 	}
 
