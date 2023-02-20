@@ -19,7 +19,7 @@ public class ConstraintSatisfactionProblem {
     private ArrayList<Constraint> clues;
 
     public ConstraintSatisfactionProblem(Color[][] puzzle, Color[][] solution, ArrayList<Color> unknownColors,
-            ArrayList<Constraint> constraints, boolean isHardMode) {
+            ArrayList<Constraint> constraints, boolean isHardMode) throws RuntimeException {
         setupVariablesAndDomains(puzzle, unknownColors);
         setupConstraintsAndAssignments(constraints, puzzle);
 
@@ -67,7 +67,7 @@ public class ConstraintSatisfactionProblem {
         }
     }
 
-    private void setupClues(Color[][] puzzle, Color[][] solution, ArrayList<Color> unknownColors, boolean isHardMode) {
+    private void setupClues(Color[][] puzzle, Color[][] solution, ArrayList<Color> unknownColors, boolean isHardMode) throws RuntimeException {
 
         if (isHardMode) {
             // Remove all constraints that don't have only unknown colors
@@ -81,7 +81,8 @@ public class ConstraintSatisfactionProblem {
         }
 
         int numSolutions = 0;
-        while (numSolutions != 1) {
+        int maxChecks = 3000;
+        while (numSolutions != 1 && maxChecks > 0) {
 
             clues.clear();
 
@@ -96,6 +97,12 @@ public class ConstraintSatisfactionProblem {
 
             // Search for all possible solutions give the clues
             numSolutions = getNumSolutions(puzzle, unknownColors);
+
+            maxChecks--;
+        }
+
+        if (maxChecks <= 0) {
+            throw new RuntimeException("Could not find a solution for the puzzle");
         }
     }
 
