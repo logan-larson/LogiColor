@@ -13,10 +13,14 @@
   import { isIncorrectSolutionOverlayOpen } from '../stores/overlay.js';
   import HelpOverlay from './HelpOverlay.svelte';
   import { isHelpOverlayOpen } from '../stores/overlay.js';
+  import UpdateOverlay from './UpdateOverlay.svelte';
+  import { isUpdateOverlayOpen } from '../stores/overlay.js';
 </script>
 
 {#if $isNewGameOverlayOpen}
   <NewGameOverlay />
+{:else if $isUpdateOverlayOpen}
+  <UpdateOverlay />
 {/if}
 {#if $isPauseOverlayOpen}
   <PauseOverlay />

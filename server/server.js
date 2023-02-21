@@ -38,6 +38,44 @@ app.get('/logo', (req, res) => {
   res.sendFile('/assets/Logo.png', { root: '.' });
 });
 
+// User calls to get the current version number
+app.get('/versions', (req, res) => {
+  readFile('./updates.json', (err, data) => {
+    if (err) {
+      console.log(err);
+      res.json(err);
+    } else {
+      // @ts-ignore
+      const updates = JSON.parse(data);
+
+      const update = updates[updates.length - 1];
+
+      res.json({
+        version: update.version,
+      });
+    }
+  });
+});
+
+// User calls to get the update notes for a specific version
+app.get('/versions/:version', (req, res) => {
+  readFile('./updates.json', (err, data) => {
+    if (err) {
+      console.log(err);
+      res.json(err);
+    } else {
+      // @ts-ignore
+      const updates = JSON.parse(data);
+
+      const update = updates.find(
+        (update) => update.version === req.params.version
+      );
+
+      res.json(update);
+    }
+  });
+});
+
 app.use(handler);
 
 app.listen(port, () => {

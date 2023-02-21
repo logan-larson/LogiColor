@@ -14,7 +14,12 @@
     isNewGameOverlayOpen,
   } from '../stores/overlay.js';
   import { isPauseOverlayOpen } from '../stores/overlay.js';
-  import { isHelpOverlayOpen, firstTime } from '../stores/overlay.js';
+  import {
+    isHelpOverlayOpen,
+    firstTime,
+    version,
+    isUpdateOverlayOpen,
+  } from '../stores/overlay.js';
   import { mode } from '../stores/game.js';
   import { timeString } from '../stores/game.js';
   import { getNewPracticeGame } from '../stores/game.js';
@@ -189,9 +194,23 @@
     window.open('help.pdf', '_blank');
   }
 
+  function openUpdates() {
+    isUpdateOverlayOpen.set(true);
+  }
+
   onMount(async () => {
     secure = window.location.hostname == 'localhost' ? 'http' : 'https';
     port = window.location.hostname == 'localhost' ? ':5000' : '';
+
+    // Get the most recent version number
+    let v = await (
+      await fetch(`${secure}://${window.location.hostname}${port}/versions`)
+    ).json();
+
+    if (v.version != $version) {
+      isUpdateOverlayOpen.set(true);
+      $version = v.version;
+    }
 
     fetch(`${secure}://${window.location.hostname}${port}/logo`)
       .then((res) => res.blob())
@@ -294,8 +313,11 @@
       {/if}
     {/if}
   </div>
-  <div id="help">
-    <button class="click-button" on:click={openHelp}>Help</button>
+  <div id="right-buttons">
+    <button class="click-button right-button" on:click={openHelp}>Help</button>
+    <button class="click-button right-button" on:click={openUpdates}
+      >Updates</button
+    >
   </div>
 </div>
 
@@ -355,8 +377,9 @@
     margin: 0px 10px;
   }
 
-  #help {
+  #right-buttons {
     display: flex;
+    gap: 5px;
   }
 
   .click-button {
