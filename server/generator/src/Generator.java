@@ -86,12 +86,12 @@ public class Generator {
                 for (int i = 0; i < numToRemove; i++) {
                     colorsToRemove.add(colorsList.get(i));
                     if (!isPhysical) {
-                        System.out.print(colorsList.get(i).getShortName() + ",");
+                        // System.out.print(colorsList.get(i).getShortName() + ",");
                     }
                 }
 
                 if (!isPhysical) {
-                    System.out.println();
+                    // System.out.println();
                 }
 
                 // Shuffle the board again
@@ -118,7 +118,7 @@ public class Generator {
                         String ending = j == puzzle[i].length - 1 ? "" : " | ";
                         String place = puzzle[i][j] == null ? "???" : puzzle[i][j].getShortName();
                         if (!isPhysical) ending = ",";
-                        System.out.print(place + ending);
+                        // System.out.print(place + ending);
                     }
 
                     if (i != puzzle.length - 1)
@@ -134,13 +134,31 @@ public class Generator {
                 try {
                     csp = new ConstraintSatisfactionProblem(puzzle, solution, colorsToRemove, constraints, isHardMode);
                 } catch (Exception e) {
-                    System.out.println("Error: " + e.getMessage());
-                    System.out.println("Retrying...");
+                    // System.out.println("Error: " + e.getMessage());
+                    // System.out.println("Retrying...");
                     csp = null;
                 }
 
                 if (csp != null) {
                     hasSolution = true;
+                }
+            }
+
+            // If not in physical mode, print the unknown colors and puzzle
+            if (!isPhysical) {
+                for (Color color : colorsToRemove) {
+                    System.out.print(color.getShortName() + ",");
+                }
+
+                System.out.println();
+
+
+                for (int i = 0; i < puzzle.length; i++) {
+                    for (int j = 0; j < puzzle[i].length; j++) {
+                        String ending = ",";
+                        String place = puzzle[i][j] == null ? "???" : puzzle[i][j].getShortName();
+                        System.out.print(place + ending);
+                    }
                 }
             }
 

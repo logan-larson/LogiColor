@@ -16,7 +16,9 @@ async function newGame() {
     console.error(err);
   }
 
-  const newGame = await getNewGame();
+  const isWildWednesday = new Date().getDay() === 3;
+
+  const newGame = await getNewGame(isWildWednesday);
 
   dailyGames.push(newGame);
 
