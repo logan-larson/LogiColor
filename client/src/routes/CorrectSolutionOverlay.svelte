@@ -60,7 +60,7 @@
 			}
 		}
 
-		isCorrectSolutionOverlayOpen.set(false);
+		//isCorrectSolutionOverlayOpen.set(false);
 	}
 
 	function close() {
