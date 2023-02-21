@@ -19,11 +19,11 @@ public class ConstraintSatisfactionProblem {
     private ArrayList<Constraint> clues;
 
     public ConstraintSatisfactionProblem(Color[][] puzzle, Color[][] solution, ArrayList<Color> unknownColors,
-            ArrayList<Constraint> constraints) {
+            ArrayList<Constraint> constraints, boolean isHardMode) throws RuntimeException {
         setupVariablesAndDomains(puzzle, unknownColors);
         setupConstraintsAndAssignments(constraints, puzzle);
 
-        setupClues(puzzle, solution, unknownColors);
+        setupClues(puzzle, solution, unknownColors, isHardMode);
     }
 
     private void setupVariablesAndDomains(Color[][] puzzle, ArrayList<Color> unknownColors) {
@@ -67,10 +67,22 @@ public class ConstraintSatisfactionProblem {
         }
     }
 
-    private void setupClues(Color[][] puzzle, Color[][] solution, ArrayList<Color> unknownColors) {
+    private void setupClues(Color[][] puzzle, Color[][] solution, ArrayList<Color> unknownColors, boolean isHardMode) throws RuntimeException {
+
+        if (isHardMode) {
+            // Remove all constraints that don't have only unknown colors
+            ArrayList<Constraint> newConstraints = new ArrayList<>();
+            for (Constraint constraint : this.constraints) {
+                if (constraint.containsOnlyUnknownColors(unknownColors)) {
+                    newConstraints.add(constraint);
+                }
+            }
+            this.constraints = newConstraints;
+        }
 
         int numSolutions = 0;
-        while (numSolutions != 1) {
+        int maxChecks = 3000;
+        while (numSolutions != 1 && maxChecks > 0) {
 
             clues.clear();
 
@@ -85,6 +97,12 @@ public class ConstraintSatisfactionProblem {
 
             // Search for all possible solutions give the clues
             numSolutions = getNumSolutions(puzzle, unknownColors);
+
+            maxChecks--;
+        }
+
+        if (maxChecks <= 0) {
+            throw new RuntimeException("Could not find a solution for the puzzle");
         }
     }
 

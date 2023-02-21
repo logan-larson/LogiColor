@@ -26,6 +26,13 @@ public class Constraint {
             return first.equals(variable) || second.equals(variable);
     }
 
+    public boolean containsOnlyUnknownColors(ArrayList<Color> unknownColors) {
+        if (second == null)
+            return unknownColors.contains(first);
+        else
+            return unknownColors.contains(first) && unknownColors.contains(second);
+    }
+
     public boolean isSatisfied(Assignment assignment, ArrayList<Assignment> assignments) {
 
         // Switch over each type of clue

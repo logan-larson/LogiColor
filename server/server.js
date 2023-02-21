@@ -17,6 +17,12 @@ app.get('/newgame', async (req, res) => {
   res.json(game);
 });
 
+app.get('/newhardgame', async (req, res) => {
+  let game = await getNewGame(true);
+
+  res.json(game);
+});
+
 app.get('/dailygame', (req, res) => {
   readFile('./daily-games.json', (err, data) => {
     if (err) {

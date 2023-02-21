@@ -1,6 +1,7 @@
 <script>
   import {
     dailyUserSolution,
+    getNewHardPracticeGame,
     practiceColorsInTray,
     practiceGame,
     practiceUserSolution,
@@ -110,6 +111,13 @@
     }
   });
 
+  getNewHardPracticeGame.subscribe((p) => {
+    if (p) {
+      getNewGame(true);
+      getNewHardPracticeGame.set(false);
+    }
+  });
+
   getDailyGame.subscribe((p) => {
     if (p) {
       getDailyGameFromServer();
@@ -145,7 +153,7 @@
     dailyTime.set(0);
   }
 
-  async function getNewGame() {
+  async function getNewGame(isHardMode = false) {
     practiceGameState.set('loading');
 
     practiceUserSolution.set([]);
@@ -159,8 +167,9 @@
     });
     isNewGameOverlayOpen.set(true);
 
+    const hardURL = isHardMode ? 'hard' : '';
     const res = await fetch(
-      `${secure}://${window.location.hostname}${port}/newgame`
+      `${secure}://${window.location.hostname}${port}/new${hardURL}game`
     );
 
     const g = await res.json();

@@ -2,6 +2,7 @@
 	import { practiceGame } from '../stores/game.js';
 	import { dailyGame } from '../stores/game.js';
 	import { getNewPracticeGame } from '../stores/game.js';
+	import { getNewHardPracticeGame } from '../stores/game.js';
 	import { getDailyGame } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
 	import { dailyGameNumber } from '../stores/game.js';
@@ -44,28 +45,39 @@
 	});
 </script>
 
-<div>
-	{#if currentMode == 'practice'}
-		<button
-			id="new-practice-game"
-			on:click={() => {
-				getNewPracticeGame.set(true);
-			}}
-			class="click-button">Create New Game</button
-		>
-	{:else if currentMode == 'daily'}
-		{#if currentDailyGameState == 'notStarted'}
+<div class="container">
+	<div class="new-games-container">
+		{#if currentMode == 'practice'}
+			<!-- <div class="new-games-container"> -->
 			<button
-				id="new-daily-game"
+				id="new-practice-game"
 				on:click={() => {
-					getDailyGame.set(true);
+					getNewPracticeGame.set(true);
 				}}
-				class="click-button">Play Daily Game</button
+				class="click-button">Create New Game</button
 			>
-		{:else}
-			<h1>Day {currentDailyGameNumber}</h1>
+			<button
+				id="new-hard-game"
+				on:click={() => {
+					getNewHardPracticeGame.set(true);
+				}}
+				class="click-button">Create New Hard Game</button
+			>
+			<!-- </div> -->
+		{:else if currentMode == 'daily'}
+			{#if currentDailyGameState == 'notStarted'}
+				<button
+					id="new-daily-game"
+					on:click={() => {
+						getDailyGame.set(true);
+					}}
+					class="click-button">Play Daily Game</button
+				>
+			{:else}
+				<h1>Day {currentDailyGameNumber}</h1>
+			{/if}
 		{/if}
-	{/if}
+	</div>
 	<ol>
 		{#if currentMode == 'practice' && currentPracticeGame != undefined}
 			{#each currentPracticeGame.clues as clue}
@@ -80,11 +92,18 @@
 </div>
 
 <style>
-	div {
+	.container {
 		color: #fff;
 		display: flex;
 		flex-direction: column;
 		font-weight: 500;
+	}
+
+	.new-games-container {
+		margin-top: 5px;
+		display: flex;
+		justify-content: center;
+		gap: 10px;
 	}
 
 	ol {
@@ -95,7 +114,7 @@
 	li {
 		margin: 3px 0px;
 		font-size: 20px;
-		font-size: max(12px, 2.5vmin);
+		/* font-size: max(12px, 2.5vmin); */
 	}
 
 	h1 {
@@ -104,10 +123,13 @@
 		text-align: center;
 	}
 
-	/*
-	@media (min-height: 600px) {
+	@media (max-width: 900px) {
 		li {
-			font-size: 24px;
+			font-size: 16px;
+		}
+
+		h1 {
+			font-size: 16px;
 		}
 	}
 
@@ -120,10 +142,8 @@
 			font-size: 14px;
 		}
 	}
-		*/
 
 	.click-button {
-		margin: 10px auto 0px;
 		border: none;
 		padding: 10px;
 		border-radius: 8px;

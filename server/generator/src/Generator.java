@@ -37,6 +37,13 @@ public class Generator {
 
     public static void main(String[] args) throws InterruptedException {
 
+
+        boolean isHardMode = false;
+
+        if (args.length == 1) {
+            isHardMode = args[0].equals("hard");
+        }
+
         boolean isPhysical = false;
 
         Scanner scanner = new Scanner(System.in);
@@ -60,62 +67,100 @@ public class Generator {
             ArrayList<Color> colorsToRemove = new ArrayList<>();
 
             Random random = new Random();
+            boolean hasSolution = false;
 
-            // Shuffle the board
-            Collections.addAll(colorsList, Color.values());
-            Collections.shuffle(colorsList);
+            ConstraintSatisfactionProblem csp = null;
 
-            // Put the first Colors in the colors to remove
-            for (int i = 0; i < numToRemove; i++) {
-                colorsToRemove.add(colorsList.get(i));
+            while (!hasSolution) {
+
+                // Clear the lists
+                colorsList.clear();
+                colorsToRemove.clear();
+
+
+                // Shuffle the board
+                Collections.addAll(colorsList, Color.values());
+                Collections.shuffle(colorsList);
+
+                // Put the first Colors in the colors to remove
+                for (int i = 0; i < numToRemove; i++) {
+                    colorsToRemove.add(colorsList.get(i));
+                    if (!isPhysical) {
+                        // System.out.print(colorsList.get(i).getShortName() + ",");
+                    }
+                }
+
                 if (!isPhysical) {
-                    System.out.print(colorsList.get(i).getShortName() + ",");
+                    // System.out.println();
+                }
+
+                // Shuffle the board again
+                Collections.shuffle(colorsList);
+
+                // Generate the puzzle by setting a random color in each place on the
+                // board
+                for (int i = 0; i < solution.length; i++) {
+                    for (int j = 0; j < solution[i].length; j++) {
+                        int colorIndex = random.nextInt(colorsList.size());
+
+                        solution[i][j] = colorsList.get(colorIndex);
+                        puzzle[i][j] = colorsToRemove.contains(colorsList.get(colorIndex)) ? null
+                                : colorsList.get(colorIndex);
+
+                        colorsList.remove(colorIndex);
+                    }
+                }
+
+                // Print the puzzle
+                for (int i = 0; i < puzzle.length; i++) {
+
+                    for (int j = 0; j < puzzle[i].length; j++) {
+                        String ending = j == puzzle[i].length - 1 ? "" : " | ";
+                        String place = puzzle[i][j] == null ? "???" : puzzle[i][j].getShortName();
+                        if (!isPhysical) ending = ",";
+                        // System.out.print(place + ending);
+                    }
+
+                    if (i != puzzle.length - 1)
+                        if (isPhysical) System.out.print("\n---------------------\n");
+
+                }
+                if (isPhysical) System.out.println();
+
+                // Generate all of the constraints for the solution
+                ArrayList<Constraint> constraints = ConstraintGenerator.GenerateConstraints(solution);
+
+                // Generate the clues
+                try {
+                    csp = new ConstraintSatisfactionProblem(puzzle, solution, colorsToRemove, constraints, isHardMode);
+                } catch (Exception e) {
+                    // System.out.println("Error: " + e.getMessage());
+                    // System.out.println("Retrying...");
+                    csp = null;
+                }
+
+                if (csp != null) {
+                    hasSolution = true;
                 }
             }
 
+            // If not in physical mode, print the unknown colors and puzzle
             if (!isPhysical) {
+                for (Color color : colorsToRemove) {
+                    System.out.print(color.getShortName() + ",");
+                }
+
                 System.out.println();
-            }
 
-            // Shuffle the board again
-            Collections.shuffle(colorsList);
 
-            // Generate the puzzle by setting a random color in each place on the
-            // board
-            for (int i = 0; i < solution.length; i++) {
-                for (int j = 0; j < solution[i].length; j++) {
-                    int colorIndex = random.nextInt(colorsList.size());
-
-                    solution[i][j] = colorsList.get(colorIndex);
-                    puzzle[i][j] = colorsToRemove.contains(colorsList.get(colorIndex)) ? null
-                            : colorsList.get(colorIndex);
-
-                    colorsList.remove(colorIndex);
+                for (int i = 0; i < puzzle.length; i++) {
+                    for (int j = 0; j < puzzle[i].length; j++) {
+                        String ending = ",";
+                        String place = puzzle[i][j] == null ? "???" : puzzle[i][j].getShortName();
+                        System.out.print(place + ending);
+                    }
                 }
             }
-
-            // Print the puzzle
-            for (int i = 0; i < puzzle.length; i++) {
-
-                for (int j = 0; j < puzzle[i].length; j++) {
-                    String ending = j == puzzle[i].length - 1 ? "" : " | ";
-                    String place = puzzle[i][j] == null ? "???" : puzzle[i][j].getShortName();
-                    if (!isPhysical) ending = ",";
-                    System.out.print(place + ending);
-                }
-
-                if (i != puzzle.length - 1)
-                    if (isPhysical) System.out.print("\n---------------------\n");
-
-            }
-            if (isPhysical) System.out.println();
-
-            // Generate all of the constraints for the solution
-            ArrayList<Constraint> constraints = ConstraintGenerator.GenerateConstraints(solution);
-
-            // Generate the clues
-            ConstraintSatisfactionProblem csp = new ConstraintSatisfactionProblem(puzzle, solution, colorsToRemove,
-                    constraints);
 
             ArrayList<Constraint> clues = csp.getClues();
 
