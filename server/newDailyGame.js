@@ -20,6 +20,8 @@ async function newGame() {
 
   const newGame = await getNewGame(isWildWednesday);
 
+  newGame.day = dailyGames.length + 1;
+
   dailyGames.push(newGame);
 
   // Local path (localhost)
