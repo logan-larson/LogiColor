@@ -113,8 +113,7 @@
 
 	li {
 		margin: 3px 0px;
-		font-size: 20px;
-		/* font-size: max(12px, 2.5vmin); */
+		font-size: max(12px, 2.5vmin);
 	}
 
 	h1 {
@@ -124,20 +123,12 @@
 	}
 
 	@media (max-width: 900px) {
-		li {
-			font-size: 16px;
-		}
-
 		h1 {
 			font-size: 16px;
 		}
 	}
 
 	@media (max-width: 600px) {
-		li {
-			font-size: 14px;
-		}
-
 		h1 {
 			font-size: 14px;
 		}
