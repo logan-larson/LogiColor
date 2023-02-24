@@ -32,6 +32,8 @@ LogiColor is heavily inspired by browser games like Wordle, and took direct insp
 - [ ] Tap to select and place colors
 - [ ] Correct and incorrect solution animations
 - [ ] Head-to-head real-time matches
+- [ ] "I give up" button shown when playing that reveals the solution
+- [x] Updates overlay shows new features added
 
 
 
