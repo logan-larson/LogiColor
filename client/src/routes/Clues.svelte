@@ -78,17 +78,19 @@
 			{/if}
 		{/if}
 	</div>
-	<ol>
-		{#if currentMode == 'practice' && currentPracticeGame != undefined}
-			{#each currentPracticeGame.clues as clue}
-				<li>{clue}</li>
-			{/each}
-		{:else if currentMode == 'daily' && currentDailyGame != undefined}
-			{#each currentDailyGame.clues as clue}
-				<li>{clue}</li>
-			{/each}
-		{/if}
-	</ol>
+	<div class="clues-container">
+		<ol>
+			{#if currentMode == 'practice' && currentPracticeGame != undefined}
+				{#each currentPracticeGame.clues as clue}
+					<li>{clue}</li>
+				{/each}
+			{:else if currentMode == 'daily' && currentDailyGame != undefined}
+				{#each currentDailyGame.clues as clue}
+					<li>{clue}</li>
+				{/each}
+			{/if}
+		</ol>
+	</div>
 </div>
 
 <style>
@@ -106,9 +108,14 @@
 		gap: 10px;
 	}
 
+	.clues-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
 	ol {
 		list-style-type: upper-roman;
-		margin: 10px auto;
 	}
 
 	li {
