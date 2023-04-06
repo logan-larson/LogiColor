@@ -45,6 +45,11 @@
       dailyGameState.set('playing');
     }
   }
+
+  function isWednesday() {
+    const today = new Date();
+    return today.getDay() === 3;
+  }
 </script>
 
 <div class="overlay">
@@ -52,7 +57,11 @@
     {#if currentMode === 'practice'}
       <h1>Practice</h1>
     {:else if currentMode === 'daily'}
-      <h1>Daily</h1>
+      {#if isWednesday()}
+        <h1>Wild Wednesday!</h1>
+      {:else}
+        <h1>Daily</h1>
+      {/if}
     {/if}
     {#if currentGame.length === 0}
       <h1>Please wait while we cook up your puzzle...</h1>
