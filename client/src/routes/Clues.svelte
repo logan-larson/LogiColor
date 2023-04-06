@@ -83,17 +83,19 @@
       {/if}
     {/if}
   </div>
-  <ol>
-    {#if currentMode == 'practice' && currentPracticeGame != undefined}
-      {#each currentPracticeGame.clues as clue}
-        <li>{clue}</li>
-      {/each}
-    {:else if currentMode == 'daily' && currentDailyGame != undefined}
-      {#each currentDailyGame.clues as clue}
-        <li>{clue}</li>
-      {/each}
-    {/if}
-  </ol>
+  <div class="clues-container">
+    <ol>
+      {#if currentMode == 'practice' && currentPracticeGame != undefined}
+        {#each currentPracticeGame.clues as clue}
+          <li>{clue}</li>
+        {/each}
+      {:else if currentMode == 'daily' && currentDailyGame != undefined}
+        {#each currentDailyGame.clues as clue}
+          <li>{clue}</li>
+        {/each}
+      {/if}
+    </ol>
+  </div>
 </div>
 
 <style>
@@ -111,15 +113,19 @@
     gap: 10px;
   }
 
+  .clues-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   ol {
     list-style-type: upper-roman;
-    margin: 10px auto;
   }
 
   li {
     margin: 3px 0px;
-    font-size: 20px;
-    /* font-size: max(12px, 2.5vmin); */
+    font-size: max(12px, 2.5vmin);
   }
 
   h1 {
@@ -129,20 +135,12 @@
   }
 
   @media (max-width: 900px) {
-    li {
-      font-size: 16px;
-    }
-
     h1 {
       font-size: 16px;
     }
   }
 
   @media (max-width: 600px) {
-    li {
-      font-size: 14px;
-    }
-
     h1 {
       font-size: 14px;
     }
