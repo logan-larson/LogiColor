@@ -3,18 +3,23 @@
   import Clues from './Clues.svelte';
   import Board from './Board.svelte';
   import UnknownColors from './UnknownColors.svelte';
+
+  /* Overlays - TODO: Make a template that utilizes an overlay interface */
   import NewGameOverlay from './NewGameOverlay.svelte';
-  import { isNewGameOverlayOpen } from '../stores/overlay.js';
   import PauseOverlay from './PauseOverlay.svelte';
-  import { isPauseOverlayOpen } from '../stores/overlay.js';
   import CorrectSolutionOverlay from './CorrectSolutionOverlay.svelte';
-  import { isCorrectSolutionOverlayOpen } from '../stores/overlay.js';
   import IncorrectSolutionOverlay from './IncorrectSolutionOverlay.svelte';
-  import { isIncorrectSolutionOverlayOpen } from '../stores/overlay.js';
   import HelpOverlay from './HelpOverlay.svelte';
-  import { isHelpOverlayOpen } from '../stores/overlay.js';
   import UpdateOverlay from './UpdateOverlay.svelte';
-  import { isUpdateOverlayOpen } from '../stores/overlay.js';
+
+  import {
+    isNewGameOverlayOpen,
+    isPauseOverlayOpen,
+    isCorrectSolutionOverlayOpen,
+    isIncorrectSolutionOverlayOpen,
+    isHelpOverlayOpen,
+    isUpdateOverlayOpen,
+  } from '../stores/overlay.js';
 </script>
 
 {#if $isNewGameOverlayOpen}

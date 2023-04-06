@@ -5,30 +5,31 @@
     practiceColorsInTray,
     practiceGame,
     practiceUserSolution,
+    practiceGameState,
+    dailyGame,
+    dailyGameState,
+    dailyColorsInTray,
+    mode,
+    timeString,
+    getNewPracticeGame,
+    getDailyGame,
+    dailyGameNumber,
+    practiceTime,
+    dailyTime,
   } from '../stores/game.js';
-  import { practiceGameState } from '../stores/game.js';
-  import { dailyGame } from '../stores/game.js';
-  import { dailyGameState, dailyColorsInTray } from '../stores/game.js';
+
   import {
     isCorrectSolutionOverlayOpen,
     isIncorrectSolutionOverlayOpen,
     isNewGameOverlayOpen,
-  } from '../stores/overlay.js';
-  import { isPauseOverlayOpen } from '../stores/overlay.js';
-  import {
+    isPauseOverlayOpen,
     isHelpOverlayOpen,
     firstTime,
     version,
     isUpdateOverlayOpen,
   } from '../stores/overlay.js';
-  import { mode } from '../stores/game.js';
-  import { timeString } from '../stores/game.js';
-  import { getNewPracticeGame } from '../stores/game.js';
-  import { getDailyGame } from '../stores/game.js';
+
   import { onMount } from 'svelte';
-  import { dailyGameNumber } from '../stores/game.js';
-  import { practiceTime } from '../stores/game.js';
-  import { dailyTime } from '../stores/game.js';
 
   let secure = 'https';
   let port = '';
