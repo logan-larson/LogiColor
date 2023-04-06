@@ -1,6 +1,13 @@
 <script>
   import { isCorrectSolutionOverlayOpen } from '../stores/overlay.js';
-  import { timeString, mode, dailyGameNumber } from '../stores/game.js';
+  import {
+    timeString,
+    mode,
+    dailyGameNumber,
+    getNewPracticeGame,
+    getNewHardPracticeGame,
+    practiceMode,
+  } from '../stores/game.js';
 
   let currentMode = 'daily';
 
@@ -64,6 +71,16 @@
   function close() {
     isCorrectSolutionOverlayOpen.set(false);
   }
+
+  function playAgain() {
+    if ($practiceMode == 'hard') {
+      getNewHardPracticeGame.set(true);
+    } else {
+      getNewPracticeGame.set(true);
+    }
+
+    isCorrectSolutionOverlayOpen.set(false);
+  }
 </script>
 
 <div class="overlay">
@@ -73,6 +90,9 @@
     <div>
       <button on:click={close}>Close</button>
       <button on:click={share}>Share</button>
+      {#if currentMode == 'practice'}
+        <button on:click={playAgain}>Play Again</button>
+      {/if}
     </div>
   </div>
 </div>

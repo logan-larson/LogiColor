@@ -8,6 +8,7 @@
     mode,
     dailyGameNumber,
     dailyGameState,
+    practiceMode,
   } from '../stores/game.js';
 
   let currentMode = 'daily';
@@ -54,6 +55,7 @@
       <button
         id="new-practice-game"
         on:click={() => {
+          $practiceMode = 'normal';
           getNewPracticeGame.set(true);
         }}
         class="click-button">Create New Game</button
@@ -61,6 +63,7 @@
       <button
         id="new-hard-game"
         on:click={() => {
+          $practiceMode = 'hard';
           getNewHardPracticeGame.set(true);
         }}
         class="click-button">Create New Hard Game</button
