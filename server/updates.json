@@ -9,7 +9,22 @@
       "In the last update, I added 'Hard Mode' to the game",
       "With that I'm starting Wild Wednesdays, where the daily game on Wednesdays will be a 'Hard Mode' game",
       "If you don't like that and would prefer a normal game on Wednesdays, let me know at loganlarson@caffeinatedstudios.dev",
-      "Happy solving!"
+      "Happy solving! - Logan"
+    ]
+  },
+  {
+    "version": "0.0.2",
+    "title": "Play Again Update",
+    "date": "April 4, 2023",
+    "notes": [
+      "Oh boy, it's been a while since the last update",
+      "This update adds...",
+      "--- A 'Play Again' button to the solved puzzle popup in Practice Mode",
+      "--- Slight visual changes to the solved puzzle popup",
+      "--- A refactoring of the updates overlay",
+      "--- An indicator to the new game screen for Wild Wednesday games",
+      "Also, I'm looking into why sometimes the Hard Mode games take a while to load",
+      "Happy solving! - Logan"
     ]
   }
 ]

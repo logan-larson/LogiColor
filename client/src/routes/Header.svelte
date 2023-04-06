@@ -213,13 +213,13 @@
     port = window.location.hostname == 'localhost' ? ':5000' : '';
 
     // Get the most recent version number
-    let v = await (
-      await fetch(`${secure}://${window.location.hostname}${port}/versions`)
+    let updates = await (
+      await fetch(`${secure}://${window.location.hostname}${port}/updates`)
     ).json();
 
-    if (v.version != $version) {
+    if (updates[0].version != $version) {
       isUpdateOverlayOpen.set(true);
-      $version = v.version;
+      $version = updates[0].version;
     }
 
     fetch(`${secure}://${window.location.hostname}${port}/logo`)
