@@ -5,14 +5,12 @@ import { colors } from './color.js';
 const asyncExec = promisify(exec);
 
 export async function getNewGame(hardMode = false) {
-  // const { stdout, stderr } = await asyncExec(
-  // 'java -cp generator/bin Generator'
-  // );
-  // Server path (localhost)
   var lines;
   if (hardMode) {
     const { stdout, stderr } = await asyncExec(
+      // Production path
       'java -cp /root/ColorPuzzleApp/server/generator/bin Generator hard'
+      // Development path
       // 'java -cp generator/bin Generator hard'
     );
 
@@ -24,7 +22,9 @@ export async function getNewGame(hardMode = false) {
     lines = stdout.split('\n');
   } else {
     const { stdout, stderr } = await asyncExec(
+      // Production path
       'java -cp /root/ColorPuzzleApp/server/generator/bin Generator'
+      // Development path
       // 'java -cp generator/bin Generator'
     );
 

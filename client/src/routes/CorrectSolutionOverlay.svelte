@@ -88,6 +88,7 @@
     justify-content: center;
     align-items: center;
     z-index: 20;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 
   .container {
