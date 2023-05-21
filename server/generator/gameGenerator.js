@@ -4,16 +4,14 @@ import { colors } from './color.js';
 
 const asyncExec = promisify(exec);
 
-export async function getNewGame(hardMode = false) {
-  // const { stdout, stderr } = await asyncExec(
-  // 'java -cp generator/bin Generator'
-  // );
+export async function getNewGame(hardMode = false, seed = -1) {
   // Server path (localhost)
   var lines;
+
   if (hardMode) {
     const { stdout, stderr } = await asyncExec(
-      'java -cp /root/ColorPuzzleApp/server/generator/bin Generator hard'
-      // 'java -cp generator/bin Generator hard'
+      // 'java -cp /root/ColorPuzzleApp/server/generator/bin Generator hard ' + seed
+      'java -cp generator/bin Generator hard ' + seed
     );
 
     if (stderr) {
@@ -24,8 +22,8 @@ export async function getNewGame(hardMode = false) {
     lines = stdout.split('\n');
   } else {
     const { stdout, stderr } = await asyncExec(
-      'java -cp /root/ColorPuzzleApp/server/generator/bin Generator'
-      // 'java -cp generator/bin Generator'
+      // 'java -cp /root/ColorPuzzleApp/server/generator/bin Generator easy ' + seed
+      'java -cp generator/bin Generator easy ' + seed
     );
 
     if (stderr) {
@@ -52,6 +50,10 @@ export async function getNewGame(hardMode = false) {
   }
 
   var solution = lines[8].split(',').filter((color) => color !== '');
+
+  var newSeed = lines[9];
+
+  console.log('New seed: ' + newSeed);
 
   let game = convertToLongStrings(puzzle, solution, clues, unknownColors);
 

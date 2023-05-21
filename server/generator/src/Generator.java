@@ -39,9 +39,13 @@ public class Generator {
 
 
         boolean isHardMode = false;
+        long seed = System.currentTimeMillis();
 
-        if (args.length == 1) {
+        if (args.length >= 1) {
             isHardMode = args[0].equals("hard");
+            if (!args[1].equals("-1")) {
+                seed = Long.parseLong(args[1]);
+            }
         }
 
         boolean isPhysical = false;
@@ -66,7 +70,7 @@ public class Generator {
             ArrayList<Color> colorsList = new ArrayList<>();
             ArrayList<Color> colorsToRemove = new ArrayList<>();
 
-            Random random = new Random();
+            Random random = new Random(seed);
             boolean hasSolution = false;
 
             ConstraintSatisfactionProblem csp = null;
@@ -80,7 +84,8 @@ public class Generator {
 
                 // Shuffle the board
                 Collections.addAll(colorsList, Color.values());
-                Collections.shuffle(colorsList);
+                // Collections.shuffle(colorsList, new Random(seed));
+                Collections.shuffle(colorsList, random);
 
                 // Put the first Colors in the colors to remove
                 for (int i = 0; i < numToRemove; i++) {
@@ -95,7 +100,8 @@ public class Generator {
                 }
 
                 // Shuffle the board again
-                Collections.shuffle(colorsList);
+                // Collections.shuffle(colorsList, new Random(seed));
+                Collections.shuffle(colorsList, random);
 
                 // Generate the puzzle by setting a random color in each place on the
                 // board
@@ -132,7 +138,7 @@ public class Generator {
 
                 // Generate the clues
                 try {
-                    csp = new ConstraintSatisfactionProblem(puzzle, solution, colorsToRemove, constraints, isHardMode);
+                    csp = new ConstraintSatisfactionProblem(puzzle, solution, colorsToRemove, constraints, isHardMode, random);
                 } catch (Exception e) {
                     // System.out.println("Error: " + e.getMessage());
                     // System.out.println("Retrying...");
@@ -211,6 +217,12 @@ public class Generator {
                     if (isPhysical) System.out.print("\n---------------------\n");
 
             }
+
+            if (!isPhysical) {
+                System.out.println();
+                System.out.println(seed);
+            }
+
             if (isPhysical) {
                 System.out.println();
                 System.out.println();

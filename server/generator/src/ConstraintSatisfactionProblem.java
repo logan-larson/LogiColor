@@ -19,11 +19,11 @@ public class ConstraintSatisfactionProblem {
     private ArrayList<Constraint> clues;
 
     public ConstraintSatisfactionProblem(Color[][] puzzle, Color[][] solution, ArrayList<Color> unknownColors,
-            ArrayList<Constraint> constraints, boolean isHardMode) throws RuntimeException {
+            ArrayList<Constraint> constraints, boolean isHardMode, Random random) throws RuntimeException {
         setupVariablesAndDomains(puzzle, unknownColors);
         setupConstraintsAndAssignments(constraints, puzzle);
 
-        setupClues(puzzle, solution, unknownColors, isHardMode);
+        setupClues(puzzle, solution, unknownColors, isHardMode, random);
     }
 
     private void setupVariablesAndDomains(Color[][] puzzle, ArrayList<Color> unknownColors) {
@@ -67,7 +67,7 @@ public class ConstraintSatisfactionProblem {
         }
     }
 
-    private void setupClues(Color[][] puzzle, Color[][] solution, ArrayList<Color> unknownColors, boolean isHardMode) throws RuntimeException {
+    private void setupClues(Color[][] puzzle, Color[][] solution, ArrayList<Color> unknownColors, boolean isHardMode, Random random) throws RuntimeException {
 
         if (isHardMode) {
             // Remove all constraints that don't have only unknown colors
@@ -90,7 +90,7 @@ public class ConstraintSatisfactionProblem {
             for (int row = 0; row < puzzle.length; row++) {
                 for (int col = 0; col < puzzle[0].length; col++) {
                     if (puzzle[row][col] == null) {
-                        this.clues.add(getRandomConstraintForColor(solution[row][col]));
+                        this.clues.add(getRandomConstraintForColor(solution[row][col], random));
                     }
                 }
             }
@@ -106,7 +106,7 @@ public class ConstraintSatisfactionProblem {
         }
     }
 
-    private Constraint getRandomConstraintForColor(Color color) {
+    private Constraint getRandomConstraintForColor(Color color, Random random) {
 
         // Get all relative constraints for the color
         ArrayList<Constraint> cluesForColor = new ArrayList<>();
@@ -118,7 +118,7 @@ public class ConstraintSatisfactionProblem {
         }
 
         // Pick a random constraint from this list
-        Random random = new Random();
+        // Random random = new Random(seed);
 
         int index = random.nextInt(cluesForColor.size());
 

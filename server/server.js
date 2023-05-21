@@ -10,9 +10,27 @@ app.use(bodyParser.json());
 
 const port = 5000;
 
+// Games with seeds
+app.get('/newgame/:seed', async (req, res) => {
+  let seed = Number(req.params.seed);
+
+  let game = await getNewGame(false, seed);
+
+  res.json(game);
+});
+
+app.get('/newhardgame/:seed', async (req, res) => {
+  let seed = Number(req.params.seed);
+
+  let game = await getNewGame(true, seed);
+
+  res.json(game);
+});
+
+// Games without seeds
 app.get('/newgame', async (req, res) => {
   // This is where I will generate a new game
-  let game = await getNewGame();
+  let game = await getNewGame(false);
 
   res.json(game);
 });
@@ -23,6 +41,7 @@ app.get('/newhardgame', async (req, res) => {
   res.json(game);
 });
 
+// Daily game
 app.get('/dailygame', (req, res) => {
   readFile('./daily-games.json', (err, data) => {
     if (err) {
