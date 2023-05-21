@@ -26,5 +26,17 @@
       "Also, I'm looking into why sometimes the Hard Mode games take a while to load",
       "Happy solving! - Logan"
     ]
+  },
+  {
+    "version": "0.0.2",
+    "title": "'Try this puzzle' Update",
+    "date": "May 21, 2023",
+    "notes": [
+      "When you share a practice puzzle, the link will take the person to the puzzle you just played",
+      "So now you can directly challenge your friends to beat your time!",
+      "I also reduced the time it takes to load a Hard Mode game",
+      "Next update will be focused around an updated drag and drop system!",
+      "Happy solving! - Logan"
+    ]
   }
 ]
