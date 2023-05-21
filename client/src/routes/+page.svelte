@@ -15,6 +15,36 @@
   import { isHelpOverlayOpen } from '../stores/overlay.js';
   import UpdateOverlay from './UpdateOverlay.svelte';
   import { isUpdateOverlayOpen } from '../stores/overlay.js';
+
+  // Used for generating games based on a seed
+	import { mode, getNewPracticeGame, getNewHardPracticeGame, seed } from '../stores/game.js';
+  import { onMount } from 'svelte';
+
+  onMount(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // If there is a seed in the URL, use it
+    if (urlParams.has('seed') && urlParams.has('hard')) {
+      let s = urlParams.get('seed');
+      let h = urlParams.get('hard');
+      if (s && h) {
+        mode.set('practice');
+        if (h === 'true') {
+          seed.set(parseInt(s));
+          getNewHardPracticeGame.set(true);
+          console.log("seed for hard game");
+        } else {
+          seed.set(parseInt(s));
+          getNewPracticeGame.set(true);
+          console.log("seed for easy game");
+        }
+      } else {
+        seed.set(-1);
+        console.log("no seed");
+      }
+    }
+  });
+
 </script>
 
 {#if $isNewGameOverlayOpen}

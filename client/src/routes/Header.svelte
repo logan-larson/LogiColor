@@ -29,6 +29,7 @@
   import { dailyGameNumber } from '../stores/game.js';
   import { practiceTime } from '../stores/game.js';
   import { dailyTime } from '../stores/game.js';
+  import { seed } from '../stores/game.js';
 
   let secure = 'https';
   let port = '';
@@ -168,8 +169,9 @@
     isNewGameOverlayOpen.set(true);
 
     const hardURL = isHardMode ? 'hard' : '';
+    const seedURL = $seed == -1 ? '' : `/${$seed}`;
     const res = await fetch(
-      `${secure}://${window.location.hostname}${port}/new${hardURL}game`
+      `${secure}://${window.location.hostname}${port}/new${hardURL}game${seedURL}`
     );
 
     const g = await res.json();

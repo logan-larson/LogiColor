@@ -51,16 +51,15 @@ export async function getNewGame(hardMode = false, seed = -1) {
 
   var solution = lines[8].split(',').filter((color) => color !== '');
 
-  var newSeed = lines[9];
+  var newSeed = lines[9].slice(0, lines[9].length - 1);
+  var numNewSeed = Number(newSeed);
 
-  console.log('New seed: ' + newSeed);
-
-  let game = convertToLongStrings(puzzle, solution, clues, unknownColors);
+  let game = convertToLongStrings(puzzle, solution, clues, unknownColors, hardMode, numNewSeed);
 
   return game;
 }
 
-function convertToLongStrings(puzzle, solution, clues, unknownColors) {
+function convertToLongStrings(puzzle, solution, clues, unknownColors, isHardMode, seed) {
   let newPuzzle = [];
 
   for (let c of puzzle) {
@@ -84,6 +83,8 @@ function convertToLongStrings(puzzle, solution, clues, unknownColors) {
     solution: newSolution,
     clues: clues,
     unknownColors: newUnknownColors,
+    isHardMode: isHardMode,
+    seed: seed,
   };
 }
 

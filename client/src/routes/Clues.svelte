@@ -6,7 +6,7 @@
 	import { getDailyGame } from '../stores/game.js';
 	import { mode } from '../stores/game.js';
 	import { dailyGameNumber } from '../stores/game.js';
-	import { dailyGameState } from '../stores/game.js';
+	import { dailyGameState, seed } from '../stores/game.js';
 
 	let currentMode = 'daily';
 
@@ -52,6 +52,8 @@
 			<button
 				id="new-practice-game"
 				on:click={() => {
+					seed.set(-1);
+					window.history.replaceState({}, 'LogiColor', '/');
 					getNewPracticeGame.set(true);
 				}}
 				class="click-button">Create New Game</button
@@ -59,6 +61,8 @@
 			<button
 				id="new-hard-game"
 				on:click={() => {
+					seed.set(-1);
+					window.history.replaceState({}, 'LogiColor', '/');
 					getNewHardPracticeGame.set(true);
 				}}
 				class="click-button">Create New Hard Game</button

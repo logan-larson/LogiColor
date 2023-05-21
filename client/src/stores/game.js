@@ -177,3 +177,5 @@ if (browser) {
 export const getNewPracticeGame = writable(false);
 export const getNewHardPracticeGame = writable(false);
 export const getDailyGame = writable(false);
+
+export const seed = writable(-1);
