@@ -17,7 +17,7 @@
   import { isUpdateOverlayOpen } from '../stores/overlay.js';
 
   // Used for generating games based on a seed
-	import { mode, getNewPracticeGame, getNewHardPracticeGame, seed } from '../stores/game.js';
+	import { mode, getNewPracticeGame, getNewHardPracticeGame, seed, isHard } from '../stores/game.js';
   import { onMount } from 'svelte';
 
   onMount(() => {
@@ -31,10 +31,12 @@
         mode.set('practice');
         if (h === 'true') {
           seed.set(parseInt(s));
+          isHard.set(true);
           getNewHardPracticeGame.set(true);
           console.log("seed for hard game");
         } else {
           seed.set(parseInt(s));
+          isHard.set(false);
           getNewPracticeGame.set(true);
           console.log("seed for easy game");
         }

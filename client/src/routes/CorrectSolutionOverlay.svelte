@@ -1,8 +1,6 @@
 <script>
 	import { isCorrectSolutionOverlayOpen } from '../stores/overlay.js';
-	import { timeString } from '../stores/game.js';
-	import { mode } from '../stores/game.js';
-	import { dailyGameNumber } from '../stores/game.js';
+	import { timeString, mode, dailyGameNumber, shareSeed, isHard } from '../stores/game.js';
 
 	let currentMode = 'daily';
 
@@ -48,7 +46,7 @@
 					.share({
 						title: 'Practice Logicolor',
 						text: `Practice Puzzle\nI solved the puzzle in ${time}!`,
-						url: 'https://logicolor.fun',
+						url: `https://logicolor.fun?seed=${$shareSeed}&hard=${$isHard}`,
 					})
 					.then(() => console.log('Successful share'))
 					.catch((error) => console.log('Error sharing', error));

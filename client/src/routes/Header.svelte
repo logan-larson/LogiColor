@@ -29,7 +29,7 @@
   import { dailyGameNumber } from '../stores/game.js';
   import { practiceTime } from '../stores/game.js';
   import { dailyTime } from '../stores/game.js';
-  import { seed } from '../stores/game.js';
+  import { seed, isHard, shareSeed } from '../stores/game.js';
 
   let secure = 'https';
   let port = '';
@@ -179,6 +179,9 @@
     practiceGame.set(g);
 
     practiceTime.set(0);
+
+    isHard.set(g.isHardMode);
+    shareSeed.set(g.seed);
   }
 
   /**
