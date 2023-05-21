@@ -81,7 +81,7 @@ public class ConstraintSatisfactionProblem {
         }
 
         int numSolutions = 0;
-        int maxChecks = 3000;
+        int maxChecks = 720;
         while (numSolutions != 1 && maxChecks > 0) {
 
             clues.clear();
