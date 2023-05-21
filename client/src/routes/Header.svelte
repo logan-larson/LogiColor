@@ -5,30 +5,31 @@
     practiceColorsInTray,
     practiceGame,
     practiceUserSolution,
+    practiceGameState,
+    dailyGame,
+    dailyGameState,
+    dailyColorsInTray,
+    mode,
+    timeString,
+    getNewPracticeGame,
+    getDailyGame,
+    dailyGameNumber,
+    practiceTime,
+    dailyTime,
   } from '../stores/game.js';
-  import { practiceGameState } from '../stores/game.js';
-  import { dailyGame } from '../stores/game.js';
-  import { dailyGameState, dailyColorsInTray } from '../stores/game.js';
+
   import {
     isCorrectSolutionOverlayOpen,
     isIncorrectSolutionOverlayOpen,
     isNewGameOverlayOpen,
-  } from '../stores/overlay.js';
-  import { isPauseOverlayOpen } from '../stores/overlay.js';
-  import {
+    isPauseOverlayOpen,
     isHelpOverlayOpen,
     firstTime,
     version,
     isUpdateOverlayOpen,
   } from '../stores/overlay.js';
-  import { mode } from '../stores/game.js';
-  import { timeString } from '../stores/game.js';
-  import { getNewPracticeGame } from '../stores/game.js';
-  import { getDailyGame } from '../stores/game.js';
+
   import { onMount } from 'svelte';
-  import { dailyGameNumber } from '../stores/game.js';
-  import { practiceTime } from '../stores/game.js';
-  import { dailyTime } from '../stores/game.js';
   import { seed, isHard, shareSeed } from '../stores/game.js';
 
   let secure = 'https';
@@ -217,13 +218,13 @@
     port = window.location.hostname == 'localhost' ? ':5000' : '';
 
     // Get the most recent version number
-    let v = await (
-      await fetch(`${secure}://${window.location.hostname}${port}/versions`)
+    let updates = await (
+      await fetch(`${secure}://${window.location.hostname}${port}/updates`)
     ).json();
 
-    if (v.version != $version) {
+    if (updates[0].version != $version) {
       isUpdateOverlayOpen.set(true);
-      $version = v.version;
+      $version = updates[0].version;
     }
 
     fetch(`${secure}://${window.location.hostname}${port}/logo`)

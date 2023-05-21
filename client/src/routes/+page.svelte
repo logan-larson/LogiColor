@@ -3,18 +3,22 @@
   import Clues from './Clues.svelte';
   import Board from './Board.svelte';
   import UnknownColors from './UnknownColors.svelte';
+
+  /* Overlays - TODO: Make a template that utilizes an overlay interface */
   import NewGameOverlay from './NewGameOverlay.svelte';
-  import { isNewGameOverlayOpen } from '../stores/overlay.js';
   import PauseOverlay from './PauseOverlay.svelte';
-  import { isPauseOverlayOpen } from '../stores/overlay.js';
   import CorrectSolutionOverlay from './CorrectSolutionOverlay.svelte';
-  import { isCorrectSolutionOverlayOpen } from '../stores/overlay.js';
   import IncorrectSolutionOverlay from './IncorrectSolutionOverlay.svelte';
-  import { isIncorrectSolutionOverlayOpen } from '../stores/overlay.js';
   import HelpOverlay from './HelpOverlay.svelte';
-  import { isHelpOverlayOpen } from '../stores/overlay.js';
   import UpdateOverlay from './UpdateOverlay.svelte';
-  import { isUpdateOverlayOpen } from '../stores/overlay.js';
+  import {
+    isUpdateOverlayOpen,
+    isPauseOverlayOpen,
+    isCorrectSolutionOverlayOpen,
+    isIncorrectSolutionOverlayOpen,
+    isHelpOverlayOpen,
+    isNewGameOverlayOpen
+  } from '../stores/overlay.js';
 
   // Used for generating games based on a seed
 	import { mode, getNewPracticeGame, getNewHardPracticeGame, seed, isHard } from '../stores/game.js';
@@ -28,6 +32,7 @@
       let s = urlParams.get('seed');
       let h = urlParams.get('hard');
       if (s && h) {
+        closeAllOverlays();
         mode.set('practice');
         if (h === 'true') {
           seed.set(parseInt(s));
@@ -46,6 +51,15 @@
       }
     }
   });
+
+  function closeAllOverlays() {
+    isCorrectSolutionOverlayOpen.set(false);
+    isIncorrectSolutionOverlayOpen.set(false);
+    isHelpOverlayOpen.set(false);
+    isPauseOverlayOpen.set(false);
+    isUpdateOverlayOpen.set(false);
+    isNewGameOverlayOpen.set(false);
+  }
 
 </script>
 

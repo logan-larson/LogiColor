@@ -1,48 +1,51 @@
 <script>
-	import { practiceGame } from '../stores/game.js';
-	import { dailyGame } from '../stores/game.js';
-	import { getNewPracticeGame } from '../stores/game.js';
-	import { getNewHardPracticeGame } from '../stores/game.js';
-	import { getDailyGame } from '../stores/game.js';
-	import { mode } from '../stores/game.js';
-	import { dailyGameNumber } from '../stores/game.js';
-	import { dailyGameState, seed } from '../stores/game.js';
+  import {
+    practiceGame,
+    dailyGame,
+    getNewPracticeGame,
+    getNewHardPracticeGame,
+    getDailyGame,
+    mode,
+    dailyGameNumber,
+    dailyGameState, seed,
+    practiceMode,
+  } from '../stores/game.js';
 
-	let currentMode = 'daily';
+  let currentMode = 'daily';
 
-	mode.subscribe(async (m) => {
-		currentMode = m;
-	});
+  mode.subscribe(async (m) => {
+    currentMode = m;
+  });
 
-	/**
-	 * @type { { puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
-	 */
-	let currentPracticeGame;
+  /**
+   * @type { { puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
+   */
+  let currentPracticeGame;
 
-	/**
-	 * @type { { puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
-	 */
-	let currentDailyGame;
+  /**
+   * @type { { puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
+   */
+  let currentDailyGame;
 
-	practiceGame.subscribe((g) => {
-		currentPracticeGame = g;
-	});
+  practiceGame.subscribe((g) => {
+    currentPracticeGame = g;
+  });
 
-	dailyGame.subscribe((g) => {
-		currentDailyGame = g;
-	});
+  dailyGame.subscribe((g) => {
+    currentDailyGame = g;
+  });
 
-	let currentDailyGameNumber = 0;
+  let currentDailyGameNumber = 0;
 
-	dailyGameNumber.subscribe((n) => {
-		currentDailyGameNumber = n;
-	});
+  dailyGameNumber.subscribe((n) => {
+    currentDailyGameNumber = n;
+  });
 
-	let currentDailyGameState = 'loading';
+  let currentDailyGameState = 'loading';
 
-	dailyGameState.subscribe((s) => {
-		currentDailyGameState = s;
-	});
+  dailyGameState.subscribe((s) => {
+    currentDailyGameState = s;
+  });
 </script>
 
 <div class="container">
@@ -98,60 +101,60 @@
 </div>
 
 <style>
-	.container {
-		color: #fff;
-		display: flex;
-		flex-direction: column;
-		font-weight: 500;
-	}
+  .container {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+  }
 
-	.new-games-container {
-		margin-top: 5px;
-		display: flex;
-		justify-content: center;
-		gap: 10px;
-	}
+  .new-games-container {
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
 
-	.clues-container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
+  .clues-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-	ol {
-		list-style-type: upper-roman;
-	}
+  ol {
+    list-style-type: upper-roman;
+  }
 
-	li {
-		margin: 3px 0px;
-		font-size: max(12px, 2.5vmin);
-	}
+  li {
+    margin: 3px 0px;
+    font-size: max(12px, 2.5vmin);
+  }
 
-	h1 {
-		margin: 10px 0px 0px;
-		font-size: 20px;
-		text-align: center;
-	}
+  h1 {
+    margin: 10px 0px 0px;
+    font-size: 20px;
+    text-align: center;
+  }
 
-	@media (max-width: 900px) {
-		h1 {
-			font-size: 16px;
-		}
-	}
+  @media (max-width: 900px) {
+    h1 {
+      font-size: 16px;
+    }
+  }
 
-	@media (max-width: 600px) {
-		h1 {
-			font-size: 14px;
-		}
-	}
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 14px;
+    }
+  }
 
-	.click-button {
-		border: none;
-		padding: 10px;
-		border-radius: 8px;
-		cursor: pointer;
-		font-weight: 600;
-		background-color: #6b6b6b;
-		color: #d6d6d6;
-	}
+  .click-button {
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    background-color: #6b6b6b;
+    color: #d6d6d6;
+  }
 </style>

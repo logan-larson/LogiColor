@@ -1,267 +1,272 @@
 <script>
-	import Color from './Color.svelte';
+  import Color from './Color.svelte';
 
-	import { dndzone } from 'svelte-dnd-action';
-	import { flip } from 'svelte/animate';
+  import { dndzone } from 'svelte-dnd-action';
+  import { flip } from 'svelte/animate';
 
-	import { dailyGame } from '../stores/game.js';
-	import { practiceGame } from '../stores/game.js';
-	import { dailyUserSolution } from '../stores/game.js';
-	import { practiceUserSolution } from '../stores/game.js';
-	import { isCorrectSolutionOverlayOpen } from '../stores/overlay';
-	import { isIncorrectSolutionOverlayOpen } from '../stores/overlay';
-	import { mode } from '../stores/game.js';
-	import { practiceGameState } from '../stores/game.js';
-	import { dailyGameState } from '../stores/game.js';
-	import { practiceColorsInTray } from '../stores/game.js';
-	import { dailyColorsInTray } from '../stores/game.js';
+  import {
+    dailyGame,
+    practiceGame,
+    dailyUserSolution,
+    practiceUserSolution,
+    mode,
+    practiceGameState,
+    dailyGameState,
+    practiceColorsInTray,
+    dailyColorsInTray,
+  } from '../stores/game.js';
 
-	let dailyItems = [
-		{ id: 0, color: 'EMERALD' },
-		{ id: 1, color: 'TEAL' },
-		{ id: 2, color: 'MUSTARD' },
-		{ id: 3, color: 'CORAL' },
-		{ id: 4, color: 'COBALT' },
-		{ id: 5, color: 'PURPLE' },
-	];
+  import {
+    isCorrectSolutionOverlayOpen,
+    isIncorrectSolutionOverlayOpen,
+  } from '../stores/overlay';
 
-	let practiceItems = [
-		{ id: 0, color: 'EMERALD' },
-		{ id: 1, color: 'TEAL' },
-		{ id: 2, color: 'MUSTARD' },
-		{ id: 3, color: 'CORAL' },
-		{ id: 4, color: 'COBALT' },
-		{ id: 5, color: 'PURPLE' },
-	];
+  let dailyItems = [
+    { id: 0, color: 'EMERALD' },
+    { id: 1, color: 'TEAL' },
+    { id: 2, color: 'MUSTARD' },
+    { id: 3, color: 'CORAL' },
+    { id: 4, color: 'COBALT' },
+    { id: 5, color: 'PURPLE' },
+  ];
 
-	/**
-	 * @type { {puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
-	 */
-	let currentPracticeGame;
+  let practiceItems = [
+    { id: 0, color: 'EMERALD' },
+    { id: 1, color: 'TEAL' },
+    { id: 2, color: 'MUSTARD' },
+    { id: 3, color: 'CORAL' },
+    { id: 4, color: 'COBALT' },
+    { id: 5, color: 'PURPLE' },
+  ];
 
-	/**
-	 * @type { {puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
-	 */
-	let currentDailyGame;
+  /**
+   * @type { {puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
+   */
+  let currentPracticeGame;
 
-	practiceColorsInTray.subscribe((c) => (practiceItems = c));
+  /**
+   * @type { {puzzle: string[], solution: string[], clues: string[], unknownColors: string[]} }
+   */
+  let currentDailyGame;
 
-	dailyColorsInTray.subscribe((c) => (dailyItems = c));
+  practiceColorsInTray.subscribe((c) => (practiceItems = c));
 
-	let currentMode = '';
+  dailyColorsInTray.subscribe((c) => (dailyItems = c));
 
-	mode.subscribe((m) => {
-		currentMode = m;
-	});
+  let currentMode = '';
 
-	/**
-	 * @type { string[] }
-	 */
-	let _practiceUserSolution = [];
+  mode.subscribe((m) => {
+    currentMode = m;
+  });
 
-	practiceUserSolution.subscribe((s) => (_practiceUserSolution = s));
+  /**
+   * @type { string[] }
+   */
+  let _practiceUserSolution = [];
 
-	practiceGame.subscribe((g) => {
-		currentPracticeGame = g;
+  practiceUserSolution.subscribe((s) => (_practiceUserSolution = s));
 
-		if (
-			currentPracticeGame != undefined &&
-			practiceItems.length === 0 &&
-			$practiceGameState != 'solved' &&
-			$practiceGameState != 'unsolved'
-		) {
-			// New game, reset tray
-			practiceItems = [];
-			practiceColorsInTray.set([]);
+  practiceGame.subscribe((g) => {
+    currentPracticeGame = g;
 
-			currentPracticeGame.unknownColors.forEach((c, i) => {
-				let _id = getColorId(c);
-				practiceItems.push({ id: _id, color: c });
-			});
-			practiceColorsInTray.set(practiceItems);
-		}
-	});
+    if (
+      currentPracticeGame != undefined &&
+      practiceItems.length === 0 &&
+      $practiceGameState != 'solved' &&
+      $practiceGameState != 'unsolved'
+    ) {
+      // New game, reset tray
+      practiceItems = [];
+      practiceColorsInTray.set([]);
 
-	/**
-	 * @type { string[] }
-	 */
-	let _dailyUserSolution = [];
+      currentPracticeGame.unknownColors.forEach((c, i) => {
+        let _id = getColorId(c);
+        practiceItems.push({ id: _id, color: c });
+      });
+      practiceColorsInTray.set(practiceItems);
+    }
+  });
 
-	dailyUserSolution.subscribe((s) => (_dailyUserSolution = s));
+  /**
+   * @type { string[] }
+   */
+  let _dailyUserSolution = [];
 
-	dailyGame.subscribe((g) => {
-		currentDailyGame = g;
+  dailyUserSolution.subscribe((s) => (_dailyUserSolution = s));
 
-		if (
-			currentDailyGame != undefined &&
-			dailyItems.length === 0 &&
-			$dailyGameState != 'solved' &&
-			$dailyGameState != 'unsolved'
-		) {
-			dailyItems = [];
-			dailyColorsInTray.set([]);
+  dailyGame.subscribe((g) => {
+    currentDailyGame = g;
 
-			currentDailyGame.unknownColors.forEach((c, i) => {
-				let _id = getColorId(c);
-				dailyItems.push({ id: _id, color: c });
-			});
-			dailyColorsInTray.set(dailyItems);
-		}
-	});
+    if (
+      currentDailyGame != undefined &&
+      dailyItems.length === 0 &&
+      $dailyGameState != 'solved' &&
+      $dailyGameState != 'unsolved'
+    ) {
+      dailyItems = [];
+      dailyColorsInTray.set([]);
 
-	/**
-	 *
-	 * @param {string} color
-	 */
-	function getColorId(color) {
-		switch (color) {
-			case 'BLACK':
-				return 0;
-			case 'TEAL':
-				return 1;
-			case 'ORANGE':
-				return 2;
-			case 'MINT':
-				return 3;
-			case 'EMERALD':
-				return 4;
-			case 'MAGENTA':
-				return 5;
-			case 'MUSTARD':
-				return 6;
-			case 'PURPLE':
-				return 7;
-			case 'BROWN':
-				return 8;
-			case 'WHITE':
-				return 9;
-			case 'CORAL':
-				return 10;
-			case 'COBALT':
-				return 11;
-			default:
-				return -1;
-		}
-	}
+      currentDailyGame.unknownColors.forEach((c, i) => {
+        let _id = getColorId(c);
+        dailyItems.push({ id: _id, color: c });
+      });
+      dailyColorsInTray.set(dailyItems);
+    }
+  });
 
-	const flipDurationMs = 300;
+  /**
+   *
+   * @param {string} color
+   */
+  function getColorId(color) {
+    switch (color) {
+      case 'BLACK':
+        return 0;
+      case 'TEAL':
+        return 1;
+      case 'ORANGE':
+        return 2;
+      case 'MINT':
+        return 3;
+      case 'EMERALD':
+        return 4;
+      case 'MAGENTA':
+        return 5;
+      case 'MUSTARD':
+        return 6;
+      case 'PURPLE':
+        return 7;
+      case 'BROWN':
+        return 8;
+      case 'WHITE':
+        return 9;
+      case 'CORAL':
+        return 10;
+      case 'COBALT':
+        return 11;
+      default:
+        return -1;
+    }
+  }
 
-	$: dailyOptions = {
-		items: dailyItems,
-		flipDurationMs,
-		centreDraggedOnCursor: true,
-		morphDisabled: true,
-	};
+  const flipDurationMs = 300;
 
-	$: practiceOptions = {
-		items: practiceItems,
-		flipDurationMs,
-		centreDraggedOnCursor: true,
-		morphDisabled: true,
-	};
+  $: dailyOptions = {
+    items: dailyItems,
+    flipDurationMs,
+    centreDraggedOnCursor: true,
+    morphDisabled: true,
+  };
 
-	/**
-	 * @param {{ detail: { items: { id: number; color: string; }[]; }; }} e
-	 */
-	function handleDndConsider(e) {
-		if (currentMode == 'practice') {
-			practiceItems = e.detail.items;
-		} else if (currentMode == 'daily') {
-			dailyItems = e.detail.items;
-		}
-	}
+  $: practiceOptions = {
+    items: practiceItems,
+    flipDurationMs,
+    centreDraggedOnCursor: true,
+    morphDisabled: true,
+  };
 
-	/**
-	 * @param {{ detail: { items: { id: number; color: string; }[]; }; }} e
-	 */
-	function handleDndFinalize(e) {
-		if (currentMode == 'practice') {
-			practiceItems = e.detail.items;
+  /**
+   * @param {{ detail: { items: { id: number; color: string; }[]; }; }} e
+   */
+  function handleDndConsider(e) {
+    if (currentMode == 'practice') {
+      practiceItems = e.detail.items;
+    } else if (currentMode == 'daily') {
+      dailyItems = e.detail.items;
+    }
+  }
 
-			practiceColorsInTray.set(practiceItems);
-			if (practiceItems.length == 0) {
-				let isEqual = _practiceUserSolution.every(
-					(value, index) => value === currentPracticeGame.solution[index]
-				);
+  /**
+   * @param {{ detail: { items: { id: number; color: string; }[]; }; }} e
+   */
+  function handleDndFinalize(e) {
+    if (currentMode == 'practice') {
+      practiceItems = e.detail.items;
 
-				if (isEqual) {
-					isCorrectSolutionOverlayOpen.set(true);
-					practiceGameState.set('solved');
-				} else {
-					isIncorrectSolutionOverlayOpen.set(true);
-					practiceGameState.set('unsolved');
-				}
-			}
-		} else if (currentMode == 'daily') {
-			dailyItems = e.detail.items;
+      practiceColorsInTray.set(practiceItems);
+      if (practiceItems.length == 0) {
+        let isEqual = _practiceUserSolution.every(
+          (value, index) => value === currentPracticeGame.solution[index]
+        );
 
-			dailyColorsInTray.set(dailyItems);
-			if (dailyItems.length == 0) {
-				let isEqual = _dailyUserSolution.every(
-					(value, index) => value === currentDailyGame.solution[index]
-				);
+        if (isEqual) {
+          isCorrectSolutionOverlayOpen.set(true);
+          practiceGameState.set('solved');
+        } else {
+          isIncorrectSolutionOverlayOpen.set(true);
+          practiceGameState.set('unsolved');
+        }
+      }
+    } else if (currentMode == 'daily') {
+      dailyItems = e.detail.items;
 
-				if (isEqual) {
-					isCorrectSolutionOverlayOpen.set(true);
-					dailyGameState.set('solved');
-				} else {
-					isIncorrectSolutionOverlayOpen.set(true);
-					dailyGameState.set('unsolved');
-				}
-			}
-		}
-	}
+      dailyColorsInTray.set(dailyItems);
+      if (dailyItems.length == 0) {
+        let isEqual = _dailyUserSolution.every(
+          (value, index) => value === currentDailyGame.solution[index]
+        );
+
+        if (isEqual) {
+          isCorrectSolutionOverlayOpen.set(true);
+          dailyGameState.set('solved');
+        } else {
+          isIncorrectSolutionOverlayOpen.set(true);
+          dailyGameState.set('unsolved');
+        }
+      }
+    }
+  }
 </script>
 
 {#if currentMode == 'practice'}
-	<div
-		id="container"
-		use:dndzone={practiceOptions}
-		on:consider={handleDndConsider}
-		on:finalize={handleDndFinalize}
-	>
-		{#if currentPracticeGame != undefined}
-			{#each practiceItems as item (item.id)}
-				<div animate:flip={{ duration: flipDurationMs }}>
-					<Color color={item.color} />
-				</div>
-			{/each}
-		{/if}
-	</div>
+  <div
+    id="container"
+    use:dndzone={practiceOptions}
+    on:consider={handleDndConsider}
+    on:finalize={handleDndFinalize}
+  >
+    {#if currentPracticeGame != undefined}
+      {#each practiceItems as item (item.id)}
+        <div animate:flip={{ duration: flipDurationMs }}>
+          <Color color={item.color} />
+        </div>
+      {/each}
+    {/if}
+  </div>
 {:else if currentMode == 'daily'}
-	<div
-		id="container"
-		use:dndzone={dailyOptions}
-		on:consider={handleDndConsider}
-		on:finalize={handleDndFinalize}
-	>
-		{#if currentDailyGame != undefined}
-			{#each dailyItems as item (item.id)}
-				<div animate:flip={{ duration: flipDurationMs }}>
-					<Color color={item.color} />
-				</div>
-			{/each}
-		{/if}
-	</div>
+  <div
+    id="container"
+    use:dndzone={dailyOptions}
+    on:consider={handleDndConsider}
+    on:finalize={handleDndFinalize}
+  >
+    {#if currentDailyGame != undefined}
+      {#each dailyItems as item (item.id)}
+        <div animate:flip={{ duration: flipDurationMs }}>
+          <Color color={item.color} />
+        </div>
+      {/each}
+    {/if}
+  </div>
 {/if}
 
 <style>
-	#container {
-		margin-top: 20px;
-		display: flex;
-		flex-flow: row;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: center;
-		gap: 5px;
-		user-select: none;
-		height: 20vmin;
-		max-height: 100px;
-	}
+  #container {
+    margin-top: 20px;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    user-select: none;
+    height: 20vmin;
+    max-height: 100px;
+  }
 
-	@media (max-width: 600px) {
-		#container {
-			margin-top: 20px;
-		}
-	}
+  @media (max-width: 600px) {
+    #container {
+      margin-top: 20px;
+    }
+  }
 </style>

@@ -63,8 +63,8 @@ app.get('/logo', (req, res) => {
   res.sendFile('/assets/Logo.png', { root: '.' });
 });
 
-// User calls to get the current version number
-app.get('/versions', (req, res) => {
+// User calls to get all the update notes
+app.get('/updates', (req, res) => {
   readFile('./updates.json', (err, data) => {
     if (err) {
       console.log(err);
@@ -73,17 +73,16 @@ app.get('/versions', (req, res) => {
       // @ts-ignore
       const updates = JSON.parse(data);
 
-      const update = updates[updates.length - 1];
+      // Reverse the array so that the most recent update is first
+      updates.reverse();
 
-      res.json({
-        version: update.version,
-      });
+      res.json(updates);
     }
   });
 });
 
 // User calls to get the update notes for a specific version
-app.get('/versions/:version', (req, res) => {
+app.get('/updates/:version', (req, res) => {
   readFile('./updates.json', (err, data) => {
     if (err) {
       console.log(err);
