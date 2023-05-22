@@ -51,7 +51,8 @@ export async function getNewGame(hardMode = false, seed = -1) {
 
   var solution = lines[8].split(',').filter((color) => color !== '');
 
-  var newSeed = lines[9].slice(0, lines[9].length - 1);
+  // var newSeed = lines[9].slice(0, lines[9].length - 1); // Windows
+  var newSeed = lines[9]; // Linux/Server
   var numNewSeed = Number(newSeed);
 
   let game = convertToLongStrings(puzzle, solution, clues, unknownColors, hardMode, numNewSeed);
