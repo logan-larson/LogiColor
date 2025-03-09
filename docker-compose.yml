@@ -6,7 +6,7 @@ services:
     ports:
       - "5644:5000"
     volumes:
-      - ./server/daily-games.json:/app/daily-games.json
+      - ./server/daily-games.json:/app/server/daily-games.json
     environment:
       - NODE_ENV=production
       - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
