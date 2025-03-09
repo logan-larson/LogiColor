@@ -214,7 +214,8 @@
   }
 
   onMount(async () => {
-    secure = window.location.hostname == 'localhost' ? 'http' : 'https';
+    // secure = window.location.hostname == 'localhost' ? 'http' : 'https';
+    secure = window.location.protocol == 'https:' ? 'https' : 'http';
     port = window.location.hostname == 'localhost' ? ':5000' : '';
 
     // Get the most recent version number
