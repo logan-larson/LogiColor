@@ -1,8 +1,11 @@
 import { promisify } from 'util';
 import { exec } from 'child_process';
 import { colors } from './color.js';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const asyncExec = promisify(exec);
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export async function getNewGame(hardMode = false, seed = -1) {
   // Server path (localhost)
@@ -10,8 +13,7 @@ export async function getNewGame(hardMode = false, seed = -1) {
 
   if (hardMode) {
     const { stdout, stderr } = await asyncExec(
-      'java -cp /root/LogiColor/server/generator/bin Generator hard ' + seed
-      // 'java -cp generator/bin Generator hard ' + seed
+      `java -cp "${__dirname}/bin" Generator hard ${seed}`
     );
 
     if (stderr) {
@@ -22,8 +24,7 @@ export async function getNewGame(hardMode = false, seed = -1) {
     lines = stdout.split('\n');
   } else {
     const { stdout, stderr } = await asyncExec(
-      'java -cp /root/LogiColor/server/generator/bin Generator easy ' + seed
-      // 'java -cp generator/bin Generator easy ' + seed
+      `java -cp "${__dirname}/bin" Generator easy ${seed}`
     );
 
     if (stderr) {

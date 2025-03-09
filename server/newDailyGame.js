@@ -6,11 +6,11 @@ async function newGame() {
 
   try {
     // Local path (localhost)
-    // let data = readFileSync('./daily-games.json', 'utf8');
-    let data = readFileSync(
-      '/root/LogiColor/server/daily-games.json',
-      'utf8'
-    );
+    let data = readFileSync('./daily-games.json', 'utf8');
+    // let data = readFileSync(
+    //   '/root/LogiColor/server/daily-games.json',
+    //   'utf8'
+    // );
     dailyGames = JSON.parse(data);
   } catch (err) {
     console.error(err);
@@ -25,16 +25,15 @@ async function newGame() {
   dailyGames.push(newGame);
 
   // Local path (localhost)
-  // writeFile('./daily-games.json', JSON.stringify(dailyGames), (err) => {
-  writeFile(
-    '/root/LogiColor/server/daily-games.json',
-    JSON.stringify(dailyGames),
-    (err) => {
-      if (err) {
-        console.log(err);
-      }
+  writeFile('./daily-games.json', JSON.stringify(dailyGames), (err) => {
+  // writeFile(
+  //   '/root/LogiColor/server/daily-games.json',
+  //   JSON.stringify(dailyGames),
+  //   (err) => {
+    if (err) {
+      console.log(err);
     }
-  );
+  });
 }
 
 newGame();

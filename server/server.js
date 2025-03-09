@@ -6,6 +6,32 @@ import { readFile } from 'fs';
 
 const app = express();
 
+// Add CORS middleware
+app.use((req, res, next) => {
+  // Allow both development and production origins
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5000',
+    process.env.ALLOWED_ORIGIN // Allow configuring via environment variable
+  ].filter(Boolean); // Remove any undefined values
+  
+  const origin = req.headers.origin;
+  
+  if (allowedOrigins.includes(origin) || !origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  }
+  
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  
+  next();
+});
+
 app.use(bodyParser.json());
 
 const port = 5000;

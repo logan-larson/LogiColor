@@ -16,16 +16,15 @@ async function remakeGames() {
   }
 
   // Local path (localhost)
-  // writeFile('./daily-games.json', JSON.stringify(dailyGames), (err) => {
-  writeFile(
-    '/root/LogiColor/server/daily-games.json',
-    JSON.stringify(dailyGames),
-    (err) => {
+  writeFile('./daily-games.json', JSON.stringify(dailyGames), (err) => {
+  // writeFile(
+  //   '/root/LogiColor/server/daily-games.json',
+  //   JSON.stringify(dailyGames),
+  //   (err) => {
       if (err) {
         console.log(err);
       }
-    }
-  );
+  // }
 }
 
 remakeGames();

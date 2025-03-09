@@ -1,0 +1,10 @@
+**/node_modules
+**/.git
+**/.vscode
+**/build
+**/.svelte-kit
+**/.env
+**/npm-debug.log
+**/Dockerfile*
+**/.dockerignore
+**/docker-compose* 

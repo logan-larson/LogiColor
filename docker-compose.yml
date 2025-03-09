@@ -1,0 +1,13 @@
+services:
+  logicolor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server/daily-games.json:/app/daily-games.json
+    environment:
+      - NODE_ENV=production
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
+    restart: unless-stopped 
