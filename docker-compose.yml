@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "5644:5000"
     volumes:
       - ./server/daily-games.json:/app/daily-games.json
     environment:
